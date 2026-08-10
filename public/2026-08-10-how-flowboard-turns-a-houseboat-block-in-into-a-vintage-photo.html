@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>How FlowBoard Turns a Houseboat Block-In into a Vintage Photo | FlowBoard Blog</title>
+  <meta name="description" content="A FlowBoard product story about using a Scene node as a composition contract, then iterating inside the same graph until a staged 3D houseboat reads like a vintage photograph.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&family=Sora:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --font-display: 'Instrument Serif', Georgia, serif;
+      --font-body: 'Sora', system-ui, sans-serif;
+      --font-mono: 'JetBrains Mono', 'SF Mono', monospace;
+      --bg-dark: rgb(10, 10, 10);
+      --bg-dark-card: rgb(22, 22, 22);
+      --text-on-dark: #ffffff;
+      --text-on-dark-muted: rgba(255,255,255,.75);
+      --text-on-dark-subtle: rgba(255,255,255,.5);
+      --accent: #c77dcd;
+      --border-dark-subtle: rgba(255,255,255,.08);
+      --content-width: 760px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: var(--font-body);
+      line-height: 1.7;
+      background: var(--bg-dark);
+      color: var(--text-on-dark-muted);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .page {
+      max-width: var(--content-width);
+      margin: 0 auto;
+      padding: 3rem 1.25rem 4rem;
+    }
+    .eyebrow, time, .meta, .sources li {
+      font-family: var(--font-mono);
+      font-size: .82rem;
+      color: var(--text-on-dark-subtle);
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+    h1, h2 {
+      font-family: var(--font-display);
+      color: var(--text-on-dark);
+      font-weight: 400;
+      line-height: 1.15;
+    }
+    h1 {
+      font-size: clamp(2rem, 1.5rem + 2.5vw, 3.5rem);
+      margin: .35rem 0 1rem;
+    }
+    h2 {
+      font-size: clamp(1.25rem, 1rem + 1.25vw, 1.75rem);
+      margin-top: 2.5rem;
+      margin-bottom: 1rem;
+    }
+    .dek {
+      font-size: 1.05rem;
+      color: var(--text-on-dark-muted);
+      margin-bottom: 1rem;
+    }
+    .hero {
+      width: 100%;
+      border-radius: 10px;
+      margin: 2rem 0;
+      border: 1px solid var(--border-dark-subtle);
+      display: block;
+    }
+    .content p { margin: 0 0 1.25rem; }
+    .content ul, .content ol { margin: 0 0 1.25rem 1.5rem; }
+    .content li { margin-bottom: .5rem; }
+    .callout, pre {
+      background: var(--bg-dark-card);
+      border: 1px solid var(--border-dark-subtle);
+      border-radius: 10px;
+      padding: 1rem 1.1rem;
+    }
+    .meta-block, footer {
+      margin-top: 2rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--border-dark-subtle);
+    }
+    .meta-block p, footer p { margin: .5rem 0; }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="eyebrow">FlowBoard Blog</div>
+    <h1>How FlowBoard Turns a Houseboat Block-In into a Vintage Photo</h1>
+    <p class="dek">The authenticated FlowBoard dashboard project for the Houseboat demo shows a compact but complete workflow: Scene capture, reference-driven outputs, page layout, and a final refinement pass that keeps composition stable while changing medium.</p>
+    <time datetime="2026-08-10">August 10, 2026</time>
+    <img class="hero" src="images/flowboard-houseboat-dashboard-refined-render.png" alt="Refined vintage-style houseboat render generated from a FlowBoard scene-capture and reference-driven workflow">
+    <section class="content">
+      <p>After wiring read-only account access, I inspected the authenticated FlowBoard project behind this demo: <strong>1960s Mississippi Houseboat</strong>. What makes it useful as a product story is not just the final image. The dashboard project itself shows the full chain: a Scene capture, a reference-driven output path, a page-layout step for comparing images, and a later edit pass that pushes the environment toward a more convincing photographic result. That makes the post stronger because it is grounded in the actual FlowBoard graph, not just exported artifacts sitting on disk.</p>
+<p><img src="images/flowboard-houseboat-dashboard-thumbnail.jpg" alt="FlowBoard dashboard thumbnail for the 1960s Mississippi Houseboat project"></p>
+<h2>A Scene node can lock composition before style exists</h2>
+<p>One of the most useful things about FlowBoard is that it lets an image start as structure instead of style. In this Houseboat demo, the first important artifact is a quick 3D staging scene rather than a polished render. The graph uses a Scene node capture to preserve the boat silhouette, the low riverbank, the spacing of the mooring posts, and the camera angle that makes the subject readable at a glance.</p>
+<p>The captured frame is visibly simple and low-poly, which is exactly why it works. It settles proportion, horizon line, camera height, and left-to-right layout before the image model is asked to improvise texture or atmosphere. In product terms, the Scene node acts like a composition contract.</p>
+<p><img src="images/flowboard-houseboat-dashboard-scene-capture.png" alt="FlowBoard Scene node capture of the Houseboat demo showing the 3D block-in used as a composition reference"></p>
+<h2>The graph turns that structure into a photographic prompt</h2>
+<p>The project graph contains the nodes you would want for this kind of handoff: Style, Time Period, Setting, Shot, Action, Parameters, Negative, and Output. The copy is direct and productively constrained. The style asks for a vintage late-1960s documentary photo. The time-period node anchors the scene to the Mississippi River in the 1960s. The action prompt preserves the barge base, windows, canopy, tires, smokestack, and warm interior light. The negative prompt explicitly rules out modern yacht features, warped geometry, UI chrome, and illustration drift.</p>
+<p>That is the useful FlowBoard move here: the graph does not merely say "make a houseboat." It carries forward the upstream spatial decisions while giving the renderer a precise medium and era to translate into.</p>
+<p><img src="images/flowboard-houseboat-dashboard-first-render.png" alt="First FlowBoard dashboard render of the Houseboat demo translated into a vintage documentary photograph"></p>
+<h2>The dashboard also shows iteration inside the same workflow</h2>
+<p>The part I especially wanted from the live project is the evidence of iteration. This dashboard copy of the graph includes a Page node configured as a three-up layout to compare images, plus an Edit node whose refinement text is simply: <code>make the trees more organic and chaotic</code>. That edit produces a later render with a livelier shoreline and less schematic foliage while keeping the boat, camera angle, and overall composition intact.</p>
+<p>That is a better FlowBoard product story than a generic before-and-after. It shows that once the scene is staged, the graph can keep reusing the same composition while making targeted aesthetic changes. You are not restarting from zero each time.</p>
+<p><img src="images/flowboard-houseboat-dashboard-refined-render.png" alt="Refined FlowBoard dashboard render of the Houseboat demo after an edit pass made the trees more organic and chaotic"></p>
+<h2>Why this matters</h2>
+<p>Plenty of image tools can produce a nice result from a prompt. What FlowBoard demonstrates here is a more durable workflow: stage the scene, capture the frame, define the era and material language, render, compare, refine, and keep the graph readable. The authenticated dashboard project for this demo is compact—just 17 nodes—but it already shows the pattern that makes the product interesting: structure first, medium second, iteration without losing the shot.</p>
+<p>This is the kind of project that makes the standalone FlowBoard blog work. It is visual, grounded in a real graph, and legible even to someone who has never opened the editor before.</p>
+    </section>
+    <section class="meta-block">
+      <div class="meta">Source repos</div>
+      <p>/Users/jweese/code/flow-board, /Users/jweese/Desktop/Houseboat_Demo</p>
+      <div class="meta">Covered topics</div>
+      <p>scene-node, reference-driven-rendering, 3d-block-in, composition-control, iterative-refinement, page-node</p>
+    </section>
+    <footer>
+      <p><a href="./index.html">Back to index</a></p>
+    </footer>
+  </main>
+</body>
+</html>

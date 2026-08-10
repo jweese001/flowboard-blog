@@ -1,17 +1,32 @@
 {
-  "last_published_at": "2026-06-28",
+  "last_published_at": "2026-08-10",
   "last_public_url": null,
   "covered_commits": {
-    "flow-board": null,
-    "screen-plays": null
+    "flow-board": null
   },
   "covered_topics": [
-    "visual-memory",
-    "reference-aware-workflows",
-    "continuity",
-    "seed-migration"
+    "scene-node",
+    "reference-driven-rendering",
+    "3d-block-in",
+    "composition-control",
+    "iterative-refinement",
+    "page-node"
   ],
   "posts": [
+    {
+      "title": "FlowBoard Turns Scene and FX Nodes into Multi-Backend Tools",
+      "date": "2026-08-10",
+      "summary": "FlowBoard now lets Scene and FX nodes stay in the same graph while switching between the ThreeJS IDE, Blender, and local or manual fallbacks.",
+      "filename": "2026-08-10-flowboard-turns-scene-and-fx-nodes-into-multi-backend-tools.html",
+      "public_url": null
+    },
+    {
+      "title": "How FlowBoard Turns a Houseboat Block-In into a Vintage Photo",
+      "date": "2026-08-10",
+      "summary": "The authenticated FlowBoard dashboard project for the Houseboat demo shows a compact but complete workflow: Scene capture, reference-driven outputs, page layout, and a final refinement pass that keeps composition stable while changing medium.",
+      "filename": "2026-08-10-how-flowboard-turns-a-houseboat-block-in-into-a-vintage-photo.html",
+      "public_url": null
+    },
     {
       "title": "Teaching FlowBoard to Remember the Scene",
       "date": "2026-06-28",
