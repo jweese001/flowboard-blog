@@ -156,6 +156,28 @@
             background: linear-gradient(135deg, var(--bg-dark-elevated) 0%, var(--bg-dark-card) 100%);
         }
 
+        .article-figure {
+            width: min(calc(100% + 5rem), 52rem);
+            margin: var(--space-xl) auto var(--space-2xl);
+            margin-left: min(-2.5rem, calc((52rem - 100%) / -2));
+            padding: .9rem;
+            border: 1px solid var(--border-dark-subtle);
+            border-radius: 12px;
+            background: var(--bg-dark-card);
+        }
+
+        .article-figure img {
+            margin: 0;
+            border-radius: 6px;
+        }
+
+        .article-figure figcaption {
+            margin-top: .85rem;
+            color: var(--text-on-dark-subtle);
+            font-size: var(--text-sm);
+            line-height: 1.6;
+        }
+
         .content code {
             font-family: var(--font-mono);
             font-size: .9em;
@@ -238,6 +260,11 @@
             .devlog-post h1 {
                 font-size: clamp(1.75rem, 1.25rem + 2vw, 2.5rem);
             }
+            .article-figure {
+                width: 100%;
+                margin-left: 0;
+                padding: .75rem;
+            }
             .content pre,
             .callout,
             blockquote {
@@ -280,6 +307,7 @@
 <h2>Scene nodes can now work from more than one source</h2>
 <p>The Scene node now carries an explicit backend choice instead of assuming a single capture path. In the current implementation, that means the existing ThreeJS IDE remains available, Blender can act as a capture source, and a manual mode keeps the node useful even when no live scene tool is connected. On the Blender path, FlowBoard can capture the current viewport, pull a camera list from the <code>.blend</code> file, and render from a named camera without leaving the graph.</p>
 <p>That is a meaningful product shift because it keeps composition planning inside FlowBoard even when the upstream scene is coming from different tools. The graph still owns the scene description, the captured image, and the downstream reference behavior. The backend becomes a choice, not a forked workflow.</p>
+<figure class="article-figure"><a href="images/flowboard-multi-output-page-graph.png"><img src="images/flowboard-multi-output-page-graph.png" alt="FlowBoard node graph with multiple outputs feeding a page layout node inside a single project canvas"></a><figcaption>Even when capture and processing paths change, the useful part stays the same: one readable FlowBoard graph can still fan multiple outputs into a page-level composition step.</figcaption></figure>
 <h2>FX nodes follow the same model</h2>
 <p>The FX node now uses the same pattern. Existing IDE-based processing is still there, but the node can also route through a Blender compositor path or a local in-app processor. That matters because it avoids treating Blender support as a special export step. It is just another node backend inside the same graph.</p>
 <p>The implementation is pragmatic instead of pretending every effect maps perfectly across tools. Blur, vignette, sharpen, grain, color balance, and lens-style distortion can route through Blender, while effects with no compositor equivalent fall back to the local processor. That kind of fallback is productively boring: the user gets one FX node model, and FlowBoard handles the backend differences without forcing a separate mental model.</p>

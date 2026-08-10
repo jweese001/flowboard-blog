@@ -2,14 +2,15 @@
   "last_published_at": "2026-08-10",
   "last_public_url": null,
   "covered_commits": {
-    "flow-board": null,
-    "screen-plays": null
+    "flow-board": null
   },
   "covered_topics": [
-    "visual-memory",
-    "reference-aware-workflows",
-    "continuity",
-    "seed-migration"
+    "scene-node",
+    "reference-driven-rendering",
+    "3d-block-in",
+    "composition-control",
+    "iterative-refinement",
+    "page-node"
   ],
   "posts": [
     {
