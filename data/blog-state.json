@@ -1,0 +1,23 @@
+{
+  "last_published_at": "2026-06-28",
+  "last_public_url": null,
+  "covered_commits": {
+    "flow-board": null,
+    "screen-plays": null
+  },
+  "covered_topics": [
+    "visual-memory",
+    "reference-aware-workflows",
+    "continuity",
+    "seed-migration"
+  ],
+  "posts": [
+    {
+      "title": "Teaching FlowBoard to Remember the Scene",
+      "date": "2026-06-28",
+      "summary": "A migrated seed post about turning FlowBoard workflows into reference-aware scene plans instead of isolated prompt fragments.",
+      "filename": "2026-06-28-teaching-flowboard-to-remember-the-scene.html",
+      "public_url": null
+    }
+  ]
+}
