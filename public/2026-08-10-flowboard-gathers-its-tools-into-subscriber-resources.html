@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>How FlowBoard Turns a Houseboat Block-In into a Vintage Photo | FlowBoard Blog</title>
-    <meta name="description" content="A FlowBoard product story about using a Scene node as a composition contract, then iterating inside the same graph until a staged 3D houseboat reads like a vintage photograph.">
+    <title>FlowBoard Gathers Its Tools into Subscriber Resources | FlowBoard Blog</title>
+    <meta name="description" content="A FlowBoard product note on turning the dashboard from a billing surface into a practical delivery point for the wider toolchain around the graph editor.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&family=Sora:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -268,42 +268,38 @@
     <article class="devlog-post">
         <header>
             <div class="eyebrow">FlowBoard Blog</div>
-            <h1>How FlowBoard Turns a Houseboat Block-In into a Vintage Photo</h1>
-            <p class="dek">The authenticated FlowBoard dashboard project for the Houseboat demo shows a compact but complete workflow: Scene capture, reference-driven outputs, page layout, and a final refinement pass that keeps composition stable while changing medium.</p>
+            <h1>FlowBoard Gathers Its Tools into Subscriber Resources</h1>
+            <p class="dek">FlowBoard&#x27;s dashboard now acts more like a product hub, collecting the desktop app, installable skills, the ThreeJS IDE, and the Blender Bridge add-on in one subscriber-facing resources area.</p>
             <time datetime="2026-08-10">August 10, 2026</time>
         </header>
 
-        <img src="images/flowboard-houseboat-dashboard-refined-render-hero.jpg" alt="Refined vintage-style houseboat render generated from a FlowBoard scene-capture and reference-driven workflow" class="hero-image">
+        <img src="images/flowboard-subscriber-resources-hero.jpg" alt="FlowBoard dashboard resource cards for desktop, skills, ThreeJS IDE, and Blender Bridge" class="hero-image">
 
         <section class="content">
-            <p>After wiring read-only account access, I inspected the authenticated FlowBoard project behind this demo: <strong>1960s Mississippi Houseboat</strong>. What makes it useful as a product story is not just the final image. The dashboard project itself shows the full chain: a Scene capture, a reference-driven output path, a page-layout step for comparing images, and a later edit pass that pushes the environment toward a more convincing photographic result. That makes the post stronger because it is grounded in the actual FlowBoard graph, not just exported artifacts sitting on disk.</p>
-<p><img src="images/flowboard-houseboat-dashboard-thumbnail.jpg" alt="FlowBoard dashboard thumbnail for the 1960s Mississippi Houseboat project"></p>
-<h2>A Scene node can lock composition before style exists</h2>
-<p>One of the most useful things about FlowBoard is that it lets an image start as structure instead of style. In this Houseboat demo, the first important artifact is a quick 3D staging scene rather than a polished render. The graph uses a Scene node capture to preserve the boat silhouette, the low riverbank, the spacing of the mooring posts, and the camera angle that makes the subject readable at a glance.</p>
-<p>The captured frame is visibly simple and low-poly, which is exactly why it works. It settles proportion, horizon line, camera height, and left-to-right layout before the image model is asked to improvise texture or atmosphere. In product terms, the Scene node acts like a composition contract.</p>
-<p><img src="images/flowboard-houseboat-dashboard-scene-capture-wide.jpg" alt="FlowBoard Scene node capture of the Houseboat demo presented in an editorial wide frame"></p>
-<h2>The graph turns that structure into a photographic prompt</h2>
-<p>The project graph contains the nodes you would want for this kind of handoff: Style, Time Period, Setting, Shot, Action, Parameters, Negative, and Output. The copy is direct and productively constrained. The style asks for a vintage late-1960s documentary photo. The time-period node anchors the scene to the Mississippi River in the 1960s. The action prompt preserves the barge base, windows, canopy, tires, smokestack, and warm interior light. The negative prompt explicitly rules out modern yacht features, warped geometry, UI chrome, and illustration drift.</p>
-<p>That is the useful FlowBoard move here: the graph does not merely say "make a houseboat." It carries forward the upstream spatial decisions while giving the renderer a precise medium and era to translate into.</p>
-<p><img src="images/flowboard-houseboat-dashboard-first-render.png" alt="First FlowBoard output translating the scene-capture reference into a late-1960s houseboat render"></p>
-<h2>The dashboard also shows iteration inside the same workflow</h2>
-<p>The part I especially wanted from the live project is the evidence of iteration. This dashboard copy of the graph includes a Page node configured as a three-up layout to compare images, plus an Edit node whose refinement text is simply: <code>Change environment to more photo realistic</code>. That kind of tiny, surgical instruction is a strong product signal. It means the workflow can preserve the chosen shot and subject while asking for a narrower change in rendering language.</p>
-<p>The resulting refined image is not a total reinvention. It keeps the recognizable structure of the block-in and first render, but the surfaces, lighting, and river atmosphere read more like a photographed object than a stylized illustration. The Page node matters here too: it gives the user a built-in place to compare outputs before deciding which path to keep.</p>
-<p><img src="images/flowboard-houseboat-workflow-collage.png" alt="Three-up collage showing the scene capture, initial render, and refined FlowBoard houseboat result"></p>
-<h2>Why this matters</h2>
-<p>Plenty of image tools can produce a nice result from a prompt. What FlowBoard demonstrates here is a more durable workflow: stage the scene, capture the frame, define the era and material language, render, compare, refine, and keep the graph readable. The authenticated dashboard project for this demo is compact—just 17 nodes—but it already shows the pattern that makes the product interesting: structure first, medium second, iteration without losing the shot.</p>
-<p><img src="images/flowboard-houseboat-dashboard-refined-render.png" alt="Refined FlowBoard output turning the staged houseboat scene into a vintage documentary-style river photograph"></p>
+            <p>One clear product shift in recent FlowBoard work is that the dashboard is no longer treated as only the place where subscription state and credits live. The committed changes in <code>client/src/pages/DashboardPage.tsx</code> turn it into a delivery surface for the tools that make the editor more useful in practice: the desktop app, installable skills, the ThreeJS IDE, and the Blender Bridge add-on.</p>
+<h2>From account page to tool hub</h2>
+<p>The important part is not just that more links were added. The resource list is structured as a real manifest, with names, descriptions, sizes, and per-item delivery behavior. Downloads from the private resources bucket stay entitlement-gated, while items that need a different path can still live in the same section. That is a cleaner product model than scattering companion tools across one-off buttons and external notes.</p>
+<p>In the current committed state, a subscriber can reach the macOS desktop app, FlowBoard Skills, the hosted ThreeJS IDE, and the Blender Bridge add-on from one place. Each item explains what it is for, which matters because these are not generic bonuses. They are parts of the same working system around scene staging, automation, and local-first use.</p>
+<h2>Different delivery paths, one interface</h2>
+<p>The implementation is also more mature than a static list of files. The desktop app stays on its own download path through the <code>download-desktop</code> edge function, while storage-backed resources are fetched from the <code>resources</code> bucket. External tools such as ThreeJS-IDE render as an open link instead of pretending everything is the same kind of artifact.</p>
+<p>That separation is easy to miss, but it is what keeps the interface honest. A downloadable app, a zipped add-on, and a hosted scene tool do not need to be forced through the same backend to feel coherent to the user. FlowBoard now exposes them through one product surface while still respecting how each one is actually delivered.</p>
+<h2>Why the Blender add-on matters here</h2>
+<p>The Blender Bridge add-on is especially telling in this context. Earlier work made Blender a real backend for Scene capture and compositor FX. Listing the hardened add-on in Subscriber Resources turns that capability into something a user can actually install without digging through the repo. The dashboard copy even includes the install-from-disk path and points people back to choosing the Blender backend on Scene or FX nodes.</p>
+<p>That is a useful pattern for FlowBoard in general: product features should not stop at code support. When a capability depends on companion tooling, the product needs a stable way to hand that tooling to the user. This resource area is starting to do that work.</p>
+<h2>A better shape for the broader FlowBoard stack</h2>
+<p>What makes this worth covering is that it changes how the product reads as a whole. FlowBoard is no longer just the graph editor plus a checkout flow. The committed dashboard work presents it as a small connected stack: local app, agent-facing skills, browser-based staging tools, and DCC bridges that all support the same node-based workflow.</p>
+<p>That is a better foundation for future product communication because it gives the surrounding ecosystem a durable home inside the app experience itself. Instead of treating companion tools as scattered side projects, FlowBoard is starting to package them as part of the product.</p>
         </section>
 
         <section class="meta-block">
             <div class="meta-row">
                 <div class="meta-heading">Source repos</div>
-                <p>/Users/jweese/code/flow-board, /Users/jweese/Desktop/Houseboat_Demo</p>
+                <p>/Users/jweese/code/flow-board</p>
             </div>
             <div class="meta-row">
                 <div class="meta-heading">Covered topics</div>
                 <div class="topics">
-                    <span class="topic-chip">scene node</span><span class="topic-chip">reference driven rendering</span><span class="topic-chip">3d block in</span><span class="topic-chip">composition control</span><span class="topic-chip">iterative refinement</span><span class="topic-chip">page node</span>
+                    <span class="topic-chip">subscriber resources</span><span class="topic-chip">product distribution</span><span class="topic-chip">desktop downloads</span><span class="topic-chip">toolchain packaging</span>
                 </div>
             </div>
         </section>

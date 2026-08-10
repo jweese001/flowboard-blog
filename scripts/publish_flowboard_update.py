@@ -18,6 +18,7 @@ INDEX_TEMPLATE_PATH = ROOT / 'templates' / 'index.html'
 
 REQUIRED_FIELDS = ['title', 'slug', 'date', 'summary', 'description', 'body_html']
 
+
 @dataclass
 class Payload:
     title: str
@@ -42,6 +43,15 @@ def save_json(path: Path, data: dict[str, Any]) -> None:
     path.write_text(json.dumps(data, indent=2) + '\n')
 
 
+def normalize_asset_path(path: str | None) -> str | None:
+    if not path:
+        return None
+    normalized = path.strip()
+    if normalized.startswith('./'):
+        normalized = normalized[2:]
+    return normalized or None
+
+
 def parse_payload(path: Path) -> Payload:
     raw = load_json(path)
     missing = [field for field in REQUIRED_FIELDS if not raw.get(field)]
@@ -54,7 +64,7 @@ def parse_payload(path: Path) -> Payload:
         summary=raw['summary'].strip(),
         description=raw['description'].strip(),
         body_html=raw['body_html'].strip(),
-        hero_image=(raw.get('hero_image') or '').strip() or None,
+        hero_image=normalize_asset_path(raw.get('hero_image')),
         hero_alt=(raw.get('hero_alt') or 'FlowBoard article hero image').strip(),
         source_repos=list(raw.get('source_repos') or ['/Users/jweese/code/flow-board']),
         covered_topics=list(raw.get('covered_topics') or []),
@@ -77,6 +87,32 @@ def human_date(date_str: str) -> str:
     return datetime.strptime(date_str, '%Y-%m-%d').strftime('%B %d, %Y')
 
 
+def short_date(date_str: str) -> str:
+    dt = datetime.strptime(date_str, '%Y-%m-%d')
+    return f"{dt.strftime('%b')} {dt.day}, {dt.year}"
+
+
+def format_topic(topic: str) -> str:
+    return topic.replace('-', ' ').replace('_', ' ').strip()
+
+
+def render_topic_chips(topics: list[str]) -> str:
+    if not topics:
+        return '<span class="topic-chip">none recorded</span>'
+    return ''.join(
+        f'<span class="topic-chip">{escape(format_topic(topic))}</span>'
+        for topic in topics
+    )
+
+
+def render_tags(topics: list[str], limit: int = 2) -> str:
+    tags = topics[:limit] if topics else ['flowboard']
+    return ''.join(
+        f'<span class="tag">{escape(format_topic(topic))}</span>'
+        for topic in tags
+    )
+
+
 def render_post(payload: Payload) -> str:
     template = POST_TEMPLATE_PATH.read_text()
     return render(template, {
@@ -90,25 +126,88 @@ def render_post(payload: Payload) -> str:
         'hero_display': 'block' if payload.hero_image else 'none',
         'body_html': payload.body_html,
         'source_repos': escape(', '.join(payload.source_repos)),
-        'covered_topics': escape(', '.join(payload.covered_topics) if payload.covered_topics else 'None recorded'),
+        'covered_topics_html': render_topic_chips(payload.covered_topics),
     })
+
+
+def post_card_html(post: dict[str, Any]) -> str:
+    image_html = ''
+    hero_image = post.get('hero_image')
+    if hero_image:
+        image_html = (
+            f'<img src="{escape(hero_image)}" '
+            f'alt="{escape(post.get("hero_alt") or post["title"])}" '
+            'class="post-image">'
+        )
+    tags_html = render_tags(list(post.get('covered_topics') or []))
+    return (
+        '<li class="post-item">'
+        f'<a href="{escape(post["filename"])}" class="post-link">'
+        '<article class="post-card">'
+        f'{image_html}'
+        '<div class="post-content">'
+        f'<div class="post-meta"><span>{escape(short_date(post["date"]))}</span></div>'
+        f'<h3 class="post-title">{escape(post["title"])}</h3>'
+        f'<p class="post-excerpt">{escape(post["summary"])}</p>'
+        '<div class="post-footer">'
+        f'<div class="post-tags">{tags_html}</div>'
+        '<span class="read-more">Continue Reading</span>'
+        '</div>'
+        '</div>'
+        '</article>'
+        '</a>'
+        '</li>'
+    )
 
 
 def render_index(posts: list[dict[str, Any]]) -> str:
     template = INDEX_TEMPLATE_PATH.read_text()
     if not posts:
-        posts_html = '<div class="empty">No posts yet. Render the first draft with <code>publish_flowboard_update.py</code>.</div>'
+        posts_html = (
+            '<section class="featured-section">'
+            '<article class="featured-card">'
+            '<div class="featured-content">'
+            '<div class="featured-header"><span class="featured-label">No posts yet</span></div>'
+            '<h2 class="featured-title">Render the first FlowBoard story</h2>'
+            '<p class="featured-excerpt">Use publish_flowboard_update.py to turn a draft payload into a rendered post, an updated index, and a ledger entry.</p>'
+            '</div></article></section>'
+        )
     else:
-        cards = []
-        for post in posts:
-            cards.append(
-                f'<a class="card" href="{escape(post["filename"])}">'
-                f'<div class="eyebrow">{escape(post["date"])}</div>'
-                f'<h2>{escape(post["title"])}</h2>'
-                f'<p>{escape(post["summary"])}</p>'
-                '</a>'
+        featured = posts[0]
+        featured_tags = render_tags(list(featured.get('covered_topics') or []))
+        featured_image = ''
+        if featured.get('hero_image'):
+            featured_image = (
+                f'<img src="{escape(featured["hero_image"])}" '
+                f'alt="{escape(featured.get("hero_alt") or featured["title"])}" '
+                'class="featured-image">'
             )
-        posts_html = '\n'.join(cards)
+        rest = posts[1:]
+        rest_html = ''.join(post_card_html(post) for post in rest)
+        posts_html = (
+            '<section class="featured-section">'
+            f'<a href="{escape(featured["filename"])}" class="post-link">'
+            '<article class="featured-card">'
+            f'{featured_image}'
+            '<div class="featured-content">'
+            '<div class="featured-header">'
+            '<span class="featured-label">Latest</span>'
+            f'<span class="post-date">{escape(short_date(featured["date"]))}</span>'
+            '</div>'
+            f'<h2 class="featured-title">{escape(featured["title"])}</h2>'
+            f'<p class="featured-excerpt">{escape(featured["summary"])}</p>'
+            '<div class="featured-footer">'
+            f'<div class="post-tags">{featured_tags}</div>'
+            '<span class="read-more">Continue Reading</span>'
+            '</div></div></article></a></section>'
+        )
+        if rest:
+            posts_html += (
+                '<section class="posts-section">'
+                '<h2 class="section-title">More Posts</h2>'
+                f'<ul class="post-grid">{rest_html}</ul>'
+                '</section>'
+            )
     return render(template, {'posts_html': posts_html})
 
 
@@ -145,6 +244,7 @@ def main() -> None:
             'archive_path': str(archive_path),
             'public_url': public_url,
             'covered_topics': payload.covered_topics,
+            'hero_image': payload.hero_image,
             'covered_commits': payload.covered_commits,
         }, indent=2))
         return
@@ -160,12 +260,15 @@ def main() -> None:
         'summary': payload.summary,
         'filename': filename,
         'public_url': public_url,
+        'hero_image': payload.hero_image,
+        'hero_alt': payload.hero_alt,
+        'covered_topics': payload.covered_topics,
     })
-    posts.sort(key=lambda item: item['date'], reverse=True)
+    posts.sort(key=lambda item: (item['date'], item['filename']), reverse=True)
 
     state['posts'] = posts
-    state['last_published_at'] = payload.date
-    state['last_public_url'] = public_url
+    state['last_published_at'] = posts[0]['date'] if posts else payload.date
+    state['last_public_url'] = posts[0].get('public_url') if posts else public_url
     state['covered_commits'] = payload.covered_commits
     state['covered_topics'] = payload.covered_topics
 

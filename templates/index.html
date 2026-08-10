@@ -1,78 +1,501 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FlowBoard Blog</title>
-  <meta name="description" content="Focused updates on building and shipping FlowBoard.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&family=Sora:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --font-display: 'Instrument Serif', Georgia, serif;
-      --font-body: 'Sora', system-ui, sans-serif;
-      --font-mono: 'JetBrains Mono', 'SF Mono', monospace;
-      --bg-dark: rgb(10, 10, 10);
-      --bg-dark-card: rgb(22, 22, 22);
-      --text-on-dark: #ffffff;
-      --text-on-dark-muted: rgba(255,255,255,.75);
-      --text-on-dark-subtle: rgba(255,255,255,.5);
-      --accent: #c77dcd;
-      --border-dark-subtle: rgba(255,255,255,.08);
-      --content-width: 900px;
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      background: var(--bg-dark);
-      color: var(--text-on-dark-muted);
-      font-family: var(--font-body);
-      line-height: 1.6;
-    }
-    a { color: inherit; text-decoration: none; }
-    a:hover h2 { text-decoration: underline; text-decoration-color: var(--accent); }
-    .page { max-width: var(--content-width); margin: 0 auto; padding: 3rem 1.25rem 4rem; }
-    .eyebrow, time {
-      font-family: var(--font-mono);
-      font-size: .82rem;
-      color: var(--text-on-dark-subtle);
-      text-transform: uppercase;
-      letter-spacing: .04em;
-    }
-    h1, h2 {
-      font-family: var(--font-display);
-      color: var(--text-on-dark);
-      font-weight: 400;
-      line-height: 1.1;
-    }
-    h1 { font-size: clamp(2.2rem, 1.4rem + 3vw, 4rem); margin: .35rem 0 1rem; }
-    h2 { font-size: clamp(1.4rem, 1.1rem + 1vw, 2rem); margin: .5rem 0; }
-    .intro { max-width: 700px; margin-bottom: 2rem; }
-    .post-list { display: grid; gap: 1rem; }
-    .card {
-      display: block;
-      background: var(--bg-dark-card);
-      border: 1px solid var(--border-dark-subtle);
-      border-radius: 12px;
-      padding: 1.25rem;
-    }
-    .card p { margin: .5rem 0 0; }
-    .empty {
-      padding: 1.25rem;
-      border: 1px dashed var(--border-dark-subtle);
-      border-radius: 12px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FlowBoard Blog</title>
+    <meta name="description" content="Focused product writing about FlowBoard.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&family=Sora:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --font-display: 'Instrument Serif', Georgia, serif;
+            --font-body: 'Sora', system-ui, sans-serif;
+            --font-mono: 'JetBrains Mono', 'SF Mono', monospace;
+
+            --text-5xl: clamp(3rem, 2rem + 5vw, 6rem);
+            --text-4xl: clamp(2.5rem, 2rem + 2.5vw, 4rem);
+            --text-3xl: clamp(2rem, 1.5rem + 2.5vw, 3rem);
+            --text-2xl: clamp(1.5rem, 1.25rem + 1.25vw, 2rem);
+            --text-xl: clamp(1.25rem, 1.1rem + .75vw, 1.5rem);
+            --text-lg: clamp(1.1rem, 1rem + .5vw, 1.25rem);
+            --text-base: clamp(.95rem, .9rem + .25vw, 1.05rem);
+            --text-sm: clamp(.8rem, .75rem + .25vw, .9rem);
+            --text-xs: clamp(.7rem, .65rem + .25vw, .8rem);
+
+            --bg-dark: rgb(10, 10, 10);
+            --bg-dark-elevated: rgb(18, 18, 18);
+            --bg-dark-card: rgb(22, 22, 22);
+
+            --text-on-dark: #ffffff;
+            --text-on-dark-muted: rgba(255, 255, 255, .7);
+            --text-on-dark-subtle: rgba(255, 255, 255, .5);
+
+            --accent: #c77dcd;
+            --accent-muted: #b46aba;
+            --accent-teal: #9dd9d9;
+            --accent-glow: rgba(199, 125, 205, .15);
+
+            --border-dark-subtle: rgba(255, 255, 255, .08);
+            --border-dark-muted: rgba(255, 255, 255, .15);
+
+            --space-xs: .25rem;
+            --space-sm: .5rem;
+            --space-md: 1rem;
+            --space-lg: 1.5rem;
+            --space-xl: 2rem;
+            --space-2xl: 3rem;
+            --space-3xl: 4rem;
+            --space-4xl: 6rem;
+
+            --content-width: 900px;
+            --nav-height: 72px;
+
+            --shadow-glow: 0 0 40px var(--accent-glow);
+
+            --duration-fast: .15s;
+            --duration-normal: .3s;
+            --duration-slow: .5s;
+            --ease-out: cubic-bezier(.22, 1, .36, 1);
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            font-size: 16px;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-body);
+            font-weight: 400;
+            background-color: var(--bg-dark);
+            color: var(--text-on-dark-muted);
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .site-wrapper {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .site-header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(10, 10, 10, 0.85);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--border-dark-subtle);
+            height: var(--nav-height);
+        }
+
+        .nav-container {
+            max-width: var(--content-width);
+            margin: 0 auto;
+            padding: 0 var(--space-xl);
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .site-logo,
+        .post-link,
+        .post-link:hover {
+            text-decoration: none;
+        }
+
+        .logo-text {
+            font-family: var(--font-display);
+            font-weight: 400;
+            font-size: var(--text-xl);
+            color: var(--text-on-dark);
+            letter-spacing: -0.02em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: var(--space-xl);
+        }
+
+        .nav-link {
+            font-family: var(--font-mono);
+            font-size: var(--text-xs);
+            color: var(--text-on-dark-muted);
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: color var(--duration-fast) var(--ease-out);
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: var(--accent-teal);
+        }
+
+        .site-main {
+            flex: 1;
+            width: 100%;
+            max-width: var(--content-width);
+            margin: 0 auto;
+            padding: var(--space-3xl) var(--space-xl);
+        }
+
+        .home-header {
+            text-align: center;
+            padding: var(--space-4xl) 0;
+            border-bottom: 1px solid var(--border-dark-subtle);
+            margin-bottom: var(--space-3xl);
+        }
+
+        .home-title {
+            font-family: var(--font-display);
+            font-size: var(--text-5xl);
+            color: var(--text-on-dark);
+            margin-bottom: var(--space-md);
+            line-height: 1;
+        }
+
+        .home-subtitle {
+            font-family: var(--font-body);
+            font-size: var(--text-lg);
+            color: var(--text-on-dark-muted);
+            max-width: 680px;
+            margin: 0 auto;
+        }
+
+        .featured-section {
+            margin-bottom: var(--space-3xl);
+        }
+
+        .featured-card {
+            background: var(--bg-dark-card);
+            border: 1px solid var(--border-dark-subtle);
+            overflow: hidden;
+            transition: all var(--duration-normal) var(--ease-out);
+        }
+
+        .featured-card:hover {
+            border-color: var(--accent);
+            box-shadow: var(--shadow-glow);
+        }
+
+        .featured-card:hover .featured-image {
+            transform: scale(1.02);
+        }
+
+        .featured-image {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            object-fit: cover;
+            display: block;
+            background: linear-gradient(135deg, var(--bg-dark-elevated) 0%, var(--bg-dark-card) 100%);
+            transition: transform var(--duration-slow) var(--ease-out);
+        }
+
+        .featured-content {
+            padding: var(--space-md) var(--space-xl) var(--space-lg);
+        }
+
+        .featured-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--space-xs);
+            gap: var(--space-md);
+        }
+
+        .featured-label,
+        .section-title,
+        .tag,
+        .read-more,
+        .post-date {
+            font-family: var(--font-mono);
+            font-size: var(--text-xs);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .featured-label,
+        .section-title,
+        .tag {
+            color: var(--accent-teal);
+        }
+
+        .post-date {
+            color: var(--text-on-dark-subtle);
+        }
+
+        .featured-title {
+            font-family: var(--font-display);
+            font-size: var(--text-2xl);
+            color: var(--text-on-dark);
+            line-height: 1.2;
+            margin-bottom: var(--space-xs);
+            transition: color var(--duration-fast);
+        }
+
+        .featured-card:hover .featured-title,
+        .post-card:hover .post-title {
+            color: var(--accent);
+        }
+
+        .featured-excerpt {
+            font-size: var(--text-sm);
+            color: var(--text-on-dark-muted);
+            line-height: 1.6;
+            margin-bottom: var(--space-lg);
+        }
+
+        .featured-footer,
+        .post-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: var(--space-md);
+        }
+
+        .post-tags {
+            display: flex;
+            gap: var(--space-sm);
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            background: transparent;
+            padding: 2px 8px;
+            border: 1px solid var(--border-dark-subtle);
+        }
+
+        .read-more {
+            color: var(--accent);
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-xs);
+            transition: all var(--duration-fast) var(--ease-out);
+        }
+
+        .read-more::after {
+            content: "→";
+            display: inline-block;
+            transition: transform var(--duration-fast) var(--ease-out);
+        }
+
+        .post-link:hover .read-more::after {
+            transform: translateX(4px);
+        }
+
+        .posts-section {
+            border-top: 1px solid var(--border-dark-subtle);
+            padding-top: var(--space-3xl);
+        }
+
+        .section-title {
+            font-weight: 500;
+            margin-bottom: var(--space-2xl);
+        }
+
+        .post-grid {
+            list-style: none;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-xl);
+        }
+
+        .post-item:last-child:nth-child(odd) {
+            grid-column: 1 / -1;
+            max-width: calc(50% - (var(--space-xl) / 2));
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .post-card {
+            background: var(--bg-dark-card);
+            border: 1px solid var(--border-dark-subtle);
+            overflow: hidden;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            transition: all var(--duration-normal) var(--ease-out);
+        }
+
+        .post-card:hover {
+            border-color: var(--border-dark-muted);
+            box-shadow: var(--shadow-glow);
+            transform: translateY(-4px);
+        }
+
+        .post-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background: linear-gradient(135deg, var(--bg-dark-elevated) 0%, var(--bg-dark-card) 100%);
+        }
+
+        .post-content {
+            padding: var(--space-xl);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .post-title {
+            font-family: var(--font-display);
+            font-size: var(--text-xl);
+            color: var(--text-on-dark);
+            margin-bottom: var(--space-sm);
+            line-height: 1.2;
+        }
+
+        .post-excerpt {
+            font-size: var(--text-base);
+            color: var(--text-on-dark-muted);
+            margin-bottom: auto;
+            padding-bottom: var(--space-lg);
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .post-meta {
+            display: flex;
+            align-items: center;
+            gap: var(--space-lg);
+            font-family: var(--font-mono);
+            font-size: var(--text-xs);
+            color: var(--text-on-dark-subtle);
+            margin-bottom: var(--space-md);
+        }
+
+        .site-footer {
+            border-top: 1px solid var(--border-dark-subtle);
+            padding: var(--space-2xl) var(--space-xl);
+            text-align: center;
+        }
+
+        .site-footer p {
+            font-family: var(--font-mono);
+            font-size: var(--text-xs);
+            color: var(--text-on-dark-subtle);
+        }
+
+        .site-footer a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .site-footer a:hover {
+            color: var(--accent-muted);
+        }
+
+        @media (max-width: 768px) {
+            .site-main {
+                padding: var(--space-xl) var(--space-lg);
+            }
+            .nav-container {
+                padding: 0 var(--space-lg);
+            }
+            .home-header {
+                padding: var(--space-2xl) 0;
+            }
+            .home-title {
+                font-size: var(--text-4xl);
+            }
+            .post-grid {
+                grid-template-columns: 1fr;
+                gap: var(--space-lg);
+            }
+
+            .post-item:last-child:nth-child(odd) {
+                grid-column: auto;
+                max-width: none;
+            }
+            .featured-title {
+                font-size: var(--text-xl);
+            }
+            .featured-content {
+                padding: var(--space-md) var(--space-lg);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .site-main {
+                padding: var(--space-lg) var(--space-md);
+            }
+            .nav-container {
+                padding: 0 var(--space-md);
+            }
+            .nav-links {
+                display: none;
+            }
+            .home-header {
+                padding: var(--space-xl) 0;
+            }
+            .home-title {
+                font-size: var(--text-3xl);
+            }
+            .home-subtitle {
+                font-size: var(--text-base);
+            }
+            .featured-image {
+                aspect-ratio: 4 / 3;
+            }
+            .featured-content {
+                padding: var(--space-md);
+            }
+            .featured-title {
+                font-size: var(--text-lg);
+            }
+            .featured-excerpt,
+            .post-excerpt {
+                display: none;
+            }
+            .post-content {
+                padding: var(--space-lg);
+            }
+            .post-image {
+                height: 160px;
+            }
+            .post-title {
+                font-size: var(--text-lg);
+            }
+        }
+    </style>
 </head>
 <body>
-  <main class="page">
-    <div class="eyebrow">Standalone publication</div>
-    <h1>FlowBoard Blog</h1>
-    <p class="intro">Focused product writing about FlowBoard: feature stories, architecture notes, workflow experiments, and the decisions that matter outside the changelog.</p>
-    <section class="post-list">
-      {{posts_html}}
-    </section>
-  </main>
+    <div class="site-wrapper">
+        <header class="site-header">
+            <nav class="nav-container">
+                <a href="./index.html" class="site-logo">
+                    <span class="logo-text">FlowBoard</span>
+                </a>
+                <div class="nav-links">
+                    <a href="./index.html" class="nav-link active">Blog</a>
+                    <a href="https://github.com/jweese001/flowboard-blog" class="nav-link">GitHub</a>
+                </div>
+            </nav>
+        </header>
+
+        <main class="site-main">
+            <div class="home-header">
+                <h1 class="home-title">FlowBoard Blog</h1>
+                <p class="home-subtitle">Product notes on scene planning, reference-driven image generation, layout workflows, and the tools that turn FlowBoard from a graph editor into a working creative system.</p>
+            </div>
+
+            {{posts_html}}
+        </main>
+
+        <footer class="site-footer">
+            <p><a href="https://github.com/jweese001/flowboard-blog">flowboard-blog</a> · standalone publication</p>
+        </footer>
+    </div>
 </body>
 </html>
