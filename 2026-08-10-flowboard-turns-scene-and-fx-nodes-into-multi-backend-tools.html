@@ -1,104 +1,282 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FlowBoard Turns Scene and FX Nodes into Multi-Backend Tools | FlowBoard Blog</title>
-  <meta name="description" content="A FlowBoard product note on multi-backend scene capture, Blender-powered FX, and keeping one graph usable across different staging tools.">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&family=Sora:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --font-display: 'Instrument Serif', Georgia, serif;
-      --font-body: 'Sora', system-ui, sans-serif;
-      --font-mono: 'JetBrains Mono', 'SF Mono', monospace;
-      --bg-dark: rgb(10, 10, 10);
-      --bg-dark-card: rgb(22, 22, 22);
-      --text-on-dark: #ffffff;
-      --text-on-dark-muted: rgba(255,255,255,.75);
-      --text-on-dark-subtle: rgba(255,255,255,.5);
-      --accent: #c77dcd;
-      --border-dark-subtle: rgba(255,255,255,.08);
-      --content-width: 760px;
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: var(--font-body);
-      line-height: 1.7;
-      background: var(--bg-dark);
-      color: var(--text-on-dark-muted);
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-    }
-    a { color: var(--accent); text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    .page {
-      max-width: var(--content-width);
-      margin: 0 auto;
-      padding: 3rem 1.25rem 4rem;
-    }
-    .eyebrow, time, .meta, .sources li {
-      font-family: var(--font-mono);
-      font-size: .82rem;
-      color: var(--text-on-dark-subtle);
-      letter-spacing: .04em;
-      text-transform: uppercase;
-    }
-    h1, h2 {
-      font-family: var(--font-display);
-      color: var(--text-on-dark);
-      font-weight: 400;
-      line-height: 1.15;
-    }
-    h1 {
-      font-size: clamp(2rem, 1.5rem + 2.5vw, 3.5rem);
-      margin: .35rem 0 1rem;
-    }
-    h2 {
-      font-size: clamp(1.25rem, 1rem + 1.25vw, 1.75rem);
-      margin-top: 2.5rem;
-      margin-bottom: 1rem;
-    }
-    .dek {
-      font-size: 1.05rem;
-      color: var(--text-on-dark-muted);
-      margin-bottom: 1rem;
-    }
-    .hero {
-      width: 100%;
-      border-radius: 10px;
-      margin: 2rem 0;
-      border: 1px solid var(--border-dark-subtle);
-      display: none;
-    }
-    .content p { margin: 0 0 1.25rem; }
-    .content ul, .content ol { margin: 0 0 1.25rem 1.5rem; }
-    .content li { margin-bottom: .5rem; }
-    .callout, pre {
-      background: var(--bg-dark-card);
-      border: 1px solid var(--border-dark-subtle);
-      border-radius: 10px;
-      padding: 1rem 1.1rem;
-    }
-    .meta-block, footer {
-      margin-top: 2rem;
-      padding-top: 1.25rem;
-      border-top: 1px solid var(--border-dark-subtle);
-    }
-    .meta-block p, footer p { margin: .5rem 0; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FlowBoard Turns Scene and FX Nodes into Multi-Backend Tools | FlowBoard Blog</title>
+    <meta name="description" content="A FlowBoard product note on multi-backend scene capture, Blender-powered FX, and keeping one graph usable across different staging tools.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&family=Sora:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --font-display: 'Instrument Serif', Georgia, serif;
+            --font-body: 'Sora', system-ui, sans-serif;
+            --font-mono: 'JetBrains Mono', 'SF Mono', monospace;
+
+            --text-4xl: clamp(2rem, 1.5rem + 2.5vw, 3.5rem);
+            --text-2xl: clamp(1.25rem, 1rem + 1.25vw, 1.75rem);
+            --text-xl: clamp(1.1rem, 1rem + .5vw, 1.35rem);
+            --text-base: clamp(1rem, 0.95rem + 0.25vw, 1.1rem);
+            --text-sm: clamp(.875rem, .8rem + .25vw, .95rem);
+            --text-xs: clamp(.75rem, .7rem + .2vw, .85rem);
+
+            --bg-dark: rgb(10, 10, 10);
+            --bg-dark-elevated: rgb(18, 18, 18);
+            --bg-dark-card: rgb(22, 22, 22);
+
+            --text-on-dark: #ffffff;
+            --text-on-dark-muted: rgba(255, 255, 255, .75);
+            --text-on-dark-subtle: rgba(255, 255, 255, .5);
+
+            --accent: #c77dcd;
+            --accent-teal: #9dd9d9;
+
+            --border-dark-subtle: rgba(255, 255, 255, .08);
+
+            --space-sm: .5rem;
+            --space-md: 1rem;
+            --space-lg: 1.5rem;
+            --space-xl: 2rem;
+            --space-2xl: 3rem;
+            --space-3xl: 4rem;
+
+            --content-width: 720px;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            font-size: 16px;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body {
+            font-family: var(--font-body);
+            font-size: var(--text-base);
+            line-height: 1.75;
+            background: var(--bg-dark);
+            color: var(--text-on-dark-muted);
+            min-height: 100vh;
+        }
+
+        a { color: var(--accent); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+
+        .devlog-post {
+            max-width: var(--content-width);
+            margin: 0 auto;
+            padding: var(--space-3xl) var(--space-xl);
+        }
+
+        .eyebrow {
+            font-family: var(--font-mono);
+            font-size: var(--text-xs);
+            color: var(--accent-teal);
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            margin-bottom: var(--space-md);
+        }
+
+        .devlog-post header {
+            margin-bottom: var(--space-2xl);
+        }
+
+        .devlog-post h1 {
+            font-family: var(--font-display);
+            font-size: var(--text-4xl);
+            font-weight: 400;
+            line-height: 1.15;
+            color: var(--text-on-dark);
+            margin-bottom: var(--space-md);
+        }
+
+        .dek {
+            font-size: var(--text-xl);
+            color: var(--text-on-dark-muted);
+            margin-bottom: var(--space-md);
+        }
+
+        .devlog-post time,
+        .meta-heading,
+        .topic-chip {
+            font-family: var(--font-mono);
+            font-size: var(--text-xs);
+            color: var(--text-on-dark-subtle);
+            letter-spacing: .05em;
+            text-transform: uppercase;
+        }
+
+        .hero-image {
+            width: 100%;
+            border-radius: 8px;
+            margin: var(--space-2xl) 0;
+            display: block;
+            object-fit: cover;
+            aspect-ratio: 16 / 9;
+            background: linear-gradient(135deg, var(--bg-dark-elevated) 0%, var(--bg-dark-card) 100%);
+        }
+
+        .content h2 {
+            font-family: var(--font-display);
+            font-size: var(--text-2xl);
+            font-weight: 400;
+            color: var(--text-on-dark);
+            margin-top: var(--space-2xl);
+            margin-bottom: var(--space-lg);
+        }
+
+        .content p,
+        .content ul,
+        .content ol,
+        .content pre,
+        .content blockquote {
+            margin-bottom: calc(var(--space-lg) + .15rem);
+        }
+
+        .content ul,
+        .content ol {
+            padding-left: var(--space-xl);
+        }
+
+        .content li {
+            margin-bottom: var(--space-sm);
+        }
+
+        .content img {
+            width: 100%;
+            border-radius: 8px;
+            margin: var(--space-lg) 0;
+            display: block;
+            background: linear-gradient(135deg, var(--bg-dark-elevated) 0%, var(--bg-dark-card) 100%);
+        }
+
+        .content code {
+            font-family: var(--font-mono);
+            font-size: .9em;
+            background: var(--bg-dark-card);
+            padding: .15em .4em;
+            border-radius: 4px;
+            border: 1px solid var(--border-dark-subtle);
+        }
+
+        .content pre,
+        .callout,
+        blockquote {
+            font-family: var(--font-mono);
+            font-size: var(--text-sm);
+            background: var(--bg-dark-card);
+            padding: var(--space-lg);
+            border-radius: 8px;
+            border: 1px solid var(--border-dark-subtle);
+            overflow-x: auto;
+        }
+
+        .content pre code {
+            background: none;
+            padding: 0;
+            border: none;
+        }
+
+        .content strong {
+            color: var(--text-on-dark);
+            font-weight: 500;
+        }
+
+        .meta-block {
+            margin-top: var(--space-3xl);
+            padding-top: var(--space-xl);
+            border-top: 1px solid var(--border-dark-subtle);
+            display: grid;
+            gap: var(--space-lg);
+        }
+
+        .meta-row p {
+            margin-top: var(--space-sm);
+            color: var(--text-on-dark-muted);
+            font-size: var(--text-sm);
+        }
+
+        .topics {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-sm);
+            margin-top: var(--space-sm);
+        }
+
+        .topic-chip {
+            color: var(--accent-teal);
+            border: 1px solid var(--border-dark-subtle);
+            padding: 2px 8px;
+        }
+
+        footer {
+            margin-top: var(--space-3xl);
+            padding-top: var(--space-xl);
+            border-top: 1px solid var(--border-dark-subtle);
+        }
+
+        footer a {
+            font-family: var(--font-mono);
+            font-size: var(--text-sm);
+            color: var(--text-on-dark-subtle);
+        }
+
+        footer a:hover {
+            color: var(--accent);
+        }
+
+        @media (max-width: 768px) {
+            .devlog-post {
+                padding: var(--space-2xl) var(--space-lg);
+            }
+            .devlog-post h1 {
+                font-size: clamp(1.75rem, 1.25rem + 2vw, 2.5rem);
+            }
+            .content pre,
+            .callout,
+            blockquote {
+                font-size: var(--text-xs);
+                padding: var(--space-md);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .devlog-post {
+                padding: var(--space-xl) var(--space-md);
+            }
+            .devlog-post h1 {
+                font-size: clamp(1.5rem, 1rem + 2vw, 2rem);
+            }
+            .content h2 {
+                font-size: var(--text-xl);
+            }
+            .hero-image {
+                margin: var(--space-lg) calc(-1 * var(--space-md));
+                width: calc(100% + var(--space-xl));
+                border-radius: 0;
+            }
+        }
+    </style>
 </head>
 <body>
-  <main class="page">
-    <div class="eyebrow">FlowBoard Blog</div>
-    <h1>FlowBoard Turns Scene and FX Nodes into Multi-Backend Tools</h1>
-    <p class="dek">FlowBoard now lets Scene and FX nodes stay in the same graph while switching between the ThreeJS IDE, Blender, and local or manual fallbacks.</p>
-    <time datetime="2026-08-10">August 10, 2026</time>
-    <img class="hero" src="" alt="FlowBoard graph nodes switching between IDE, Blender, and local backends">
-    <section class="content">
-      <p>One of the recurring problems in image-tool workflows is that the graph gets tied to one staging environment. If a scene was blocked in a browser tool, the rest of the pipeline assumes that tool stays in the loop. Recent FlowBoard work moves in a better direction: Scene and FX nodes now keep the same graph structure while letting the user switch the backend that actually does the capture or processing.</p>
+    <article class="devlog-post">
+        <header>
+            <div class="eyebrow">FlowBoard Blog</div>
+            <h1>FlowBoard Turns Scene and FX Nodes into Multi-Backend Tools</h1>
+            <p class="dek">FlowBoard now lets Scene and FX nodes stay in the same graph while switching between the ThreeJS IDE, Blender, and local or manual fallbacks.</p>
+            <time datetime="2026-08-10">August 10, 2026</time>
+        </header>
+
+        <img src="images/flowboard-multi-backend-hero.jpg" alt="FlowBoard graph nodes switching between IDE, Blender, and local backends" class="hero-image">
+
+        <section class="content">
+            <p>One of the recurring problems in image-tool workflows is that the graph gets tied to one staging environment. If a scene was blocked in a browser tool, the rest of the pipeline assumes that tool stays in the loop. Recent FlowBoard work moves in a better direction: Scene and FX nodes now keep the same graph structure while letting the user switch the backend that actually does the capture or processing.</p>
 <h2>Scene nodes can now work from more than one source</h2>
 <p>The Scene node now carries an explicit backend choice instead of assuming a single capture path. In the current implementation, that means the existing ThreeJS IDE remains available, Blender can act as a capture source, and a manual mode keeps the node useful even when no live scene tool is connected. On the Blender path, FlowBoard can capture the current viewport, pull a camera list from the <code>.blend</code> file, and render from a named camera without leaving the graph.</p>
 <p>That is a meaningful product shift because it keeps composition planning inside FlowBoard even when the upstream scene is coming from different tools. The graph still owns the scene description, the captured image, and the downstream reference behavior. The backend becomes a choice, not a forked workflow.</p>
@@ -111,16 +289,24 @@
 <h2>Why this is a good FlowBoard direction</h2>
 <p>FlowBoard gets stronger when a graph can preserve intent while the capture tool changes. The current assembler already treats Scene node captures as composition references downstream, so this backend work is not only about convenience. It reinforces the larger product idea that visual planning, references, and generation context should stay attached to the graph instead of living in disconnected external steps.</p>
 <p>In practice, this makes FlowBoard more believable for mixed pipelines. A user can block a shot in the ThreeJS IDE, pull a scene from Blender, or stay in manual mode and still keep one coherent graph. That is a better foundation than betting the whole product on a single staging surface.
-    </section>
-    <section class="meta-block">
-      <div class="meta">Source repos</div>
-      <p>/Users/jweese/code/flow-board</p>
-      <div class="meta">Covered topics</div>
-      <p>multi-backend-workflows, blender-bridge, scene-capture, fx-processing</p>
-    </section>
-    <footer>
-      <p><a href="./index.html">Back to index</a></p>
-    </footer>
-  </main>
+        </section>
+
+        <section class="meta-block">
+            <div class="meta-row">
+                <div class="meta-heading">Source repos</div>
+                <p>/Users/jweese/code/flow-board</p>
+            </div>
+            <div class="meta-row">
+                <div class="meta-heading">Covered topics</div>
+                <div class="topics">
+                    <span class="topic-chip">multi backend workflows</span><span class="topic-chip">blender bridge</span><span class="topic-chip">scene capture</span><span class="topic-chip">fx processing</span>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <a href="./index.html">← Back to FlowBoard Blog</a>
+        </footer>
+    </article>
 </body>
 </html>
