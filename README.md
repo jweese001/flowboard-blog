@@ -8,9 +8,11 @@ Why this exists
 - Preserve a future path to link from `flow.w33s3.com` without making the blog dependent on the app deployment.
 
 Current status
-- Local scaffold only; no remote repo or cron job yet.
+- GitHub repo created: `https://github.com/jweese001/flowboard-blog`
+- Runs as a standalone local+GitHub project with deterministic publishing assets committed.
 - Reuses the visual feel of the existing w33s3 devlog / Lemmy's Mic posts.
 - Includes a deterministic publisher script so future cron runs can generate structured payloads without regenerating HTML boilerplate each time.
+- Review-gated draft generation cron can write payloads into `content/drafts/` without pushing.
 
 Directory layout
 ```text
@@ -61,7 +63,6 @@ python3 scripts/publish_flowboard_update.py --help
 ```
 
 Suggested next steps
-- Create the remote repo.
 - Decide the public base URL.
-- Add one hand-authored seed post or migrate one existing FlowBoard devlog into this format.
-- After review, create a draft-only cron that writes payload JSON plus rendered HTML but does not push.
+- Add a second migrated or hand-authored post so the index has a sequence.
+- After reviewing a few draft-only cron runs, choose whether to add commit/push automation and live URL verification.
