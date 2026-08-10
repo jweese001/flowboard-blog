@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FlowBoard Turns Scene and FX Nodes into Multi-Backend Tools | FlowBoard Blog</title>
+  <meta name="description" content="A FlowBoard product note on multi-backend scene capture, Blender-powered FX, and keeping one graph usable across different staging tools.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&family=Sora:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --font-display: 'Instrument Serif', Georgia, serif;
+      --font-body: 'Sora', system-ui, sans-serif;
+      --font-mono: 'JetBrains Mono', 'SF Mono', monospace;
+      --bg-dark: rgb(10, 10, 10);
+      --bg-dark-card: rgb(22, 22, 22);
+      --text-on-dark: #ffffff;
+      --text-on-dark-muted: rgba(255,255,255,.75);
+      --text-on-dark-subtle: rgba(255,255,255,.5);
+      --accent: #c77dcd;
+      --border-dark-subtle: rgba(255,255,255,.08);
+      --content-width: 760px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: var(--font-body);
+      line-height: 1.7;
+      background: var(--bg-dark);
+      color: var(--text-on-dark-muted);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .page {
+      max-width: var(--content-width);
+      margin: 0 auto;
+      padding: 3rem 1.25rem 4rem;
+    }
+    .eyebrow, time, .meta, .sources li {
+      font-family: var(--font-mono);
+      font-size: .82rem;
+      color: var(--text-on-dark-subtle);
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+    h1, h2 {
+      font-family: var(--font-display);
+      color: var(--text-on-dark);
+      font-weight: 400;
+      line-height: 1.15;
+    }
+    h1 {
+      font-size: clamp(2rem, 1.5rem + 2.5vw, 3.5rem);
+      margin: .35rem 0 1rem;
+    }
+    h2 {
+      font-size: clamp(1.25rem, 1rem + 1.25vw, 1.75rem);
+      margin-top: 2.5rem;
+      margin-bottom: 1rem;
+    }
+    .dek {
+      font-size: 1.05rem;
+      color: var(--text-on-dark-muted);
+      margin-bottom: 1rem;
+    }
+    .hero {
+      width: 100%;
+      border-radius: 10px;
+      margin: 2rem 0;
+      border: 1px solid var(--border-dark-subtle);
+      display: none;
+    }
+    .content p { margin: 0 0 1.25rem; }
+    .content ul, .content ol { margin: 0 0 1.25rem 1.5rem; }
+    .content li { margin-bottom: .5rem; }
+    .callout, pre {
+      background: var(--bg-dark-card);
+      border: 1px solid var(--border-dark-subtle);
+      border-radius: 10px;
+      padding: 1rem 1.1rem;
+    }
+    .meta-block, footer {
+      margin-top: 2rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--border-dark-subtle);
+    }
+    .meta-block p, footer p { margin: .5rem 0; }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="eyebrow">FlowBoard Blog</div>
+    <h1>FlowBoard Turns Scene and FX Nodes into Multi-Backend Tools</h1>
+    <p class="dek">FlowBoard now lets Scene and FX nodes stay in the same graph while switching between the ThreeJS IDE, Blender, and local or manual fallbacks.</p>
+    <time datetime="2026-08-10">August 10, 2026</time>
+    <img class="hero" src="" alt="FlowBoard graph nodes switching between IDE, Blender, and local backends">
+    <section class="content">
+      <p>One of the recurring problems in image-tool workflows is that the graph gets tied to one staging environment. If a scene was blocked in a browser tool, the rest of the pipeline assumes that tool stays in the loop. Recent FlowBoard work moves in a better direction: Scene and FX nodes now keep the same graph structure while letting the user switch the backend that actually does the capture or processing.</p>
+<h2>Scene nodes can now work from more than one source</h2>
+<p>The Scene node now carries an explicit backend choice instead of assuming a single capture path. In the current implementation, that means the existing ThreeJS IDE remains available, Blender can act as a capture source, and a manual mode keeps the node useful even when no live scene tool is connected. On the Blender path, FlowBoard can capture the current viewport, pull a camera list from the <code>.blend</code> file, and render from a named camera without leaving the graph.</p>
+<p>That is a meaningful product shift because it keeps composition planning inside FlowBoard even when the upstream scene is coming from different tools. The graph still owns the scene description, the captured image, and the downstream reference behavior. The backend becomes a choice, not a forked workflow.</p>
+<h2>FX nodes follow the same model</h2>
+<p>The FX node now uses the same pattern. Existing IDE-based processing is still there, but the node can also route through a Blender compositor path or a local in-app processor. That matters because it avoids treating Blender support as a special export step. It is just another node backend inside the same graph.</p>
+<p>The implementation is pragmatic instead of pretending every effect maps perfectly across tools. Blur, vignette, sharpen, grain, color balance, and lens-style distortion can route through Blender, while effects with no compositor equivalent fall back to the local processor. That kind of fallback is productively boring: the user gets one FX node model, and FlowBoard handles the backend differences without forcing a separate mental model.</p>
+<h2>The Blender bridge is part of the product surface now</h2>
+<p>This work is backed by a small localhost HTTP bridge for the Blender add-on rather than a browser-window messaging trick. FlowBoard polls the add-on for status, can ask it for scene and camera information, and uses the same bridge for both scene capture and compositor-style image processing. Just as important, the add-on is now listed in Subscriber Resources with install-from-disk instructions, which turns the Blender path into a real supported companion rather than a hidden experiment.</p>
+<p>That packaging detail matters. A backend is not truly part of the product until people can discover it, install it, and understand when to choose it. Putting the add-on alongside the desktop app, skills bundle, and ThreeJS IDE link makes the Blender route legible from the dashboard itself.</p>
+<h2>Why this is a good FlowBoard direction</h2>
+<p>FlowBoard gets stronger when a graph can preserve intent while the capture tool changes. The current assembler already treats Scene node captures as composition references downstream, so this backend work is not only about convenience. It reinforces the larger product idea that visual planning, references, and generation context should stay attached to the graph instead of living in disconnected external steps.</p>
+<p>In practice, this makes FlowBoard more believable for mixed pipelines. A user can block a shot in the ThreeJS IDE, pull a scene from Blender, or stay in manual mode and still keep one coherent graph. That is a better foundation than betting the whole product on a single staging surface.
+    </section>
+    <section class="meta-block">
+      <div class="meta">Source repos</div>
+      <p>/Users/jweese/code/flow-board</p>
+      <div class="meta">Covered topics</div>
+      <p>multi-backend-workflows, blender-bridge, scene-capture, fx-processing</p>
+    </section>
+    <footer>
+      <p><a href="./index.html">Back to index</a></p>
+    </footer>
+  </main>
+</body>
+</html>
