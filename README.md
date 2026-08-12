@@ -45,6 +45,7 @@ Planned source policy
 Publishing model
 1. Agent inspects repo activity and picks one coherent public-facing story.
 2. Agent writes a structured payload JSON.
+   Every payload must include at least one relevant local image via `hero_image` and descriptive `hero_alt`. Prefer a FlowBoard UI screenshot, manual image, or generated example; use relevant generated editorial art only when a real product asset is not suitable.
 3. `scripts/publish_flowboard_update.py` renders the article and index deterministically.
 4. First few runs should stay review-gated.
 5. Only later should this become a push + live-verify cron.
@@ -60,6 +61,9 @@ Quick start
 ```bash
 cd /Users/jweese/code/flowboard-blog
 python3 scripts/publish_flowboard_update.py --help
+
+# Render a human-readable draft without publishing or changing the ledger:
+python3 scripts/publish_flowboard_update.py --preview content/drafts/example.json
 ```
 
 Suggested next steps

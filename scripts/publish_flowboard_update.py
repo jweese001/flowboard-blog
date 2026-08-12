@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import shutil
 from dataclasses import dataclass
 from datetime import datetime
 from html import escape
@@ -13,10 +14,14 @@ ROOT = Path(__file__).resolve().parent.parent
 DATA_PATH = ROOT / 'data' / 'blog-state.json'
 PUBLIC_DIR = ROOT / 'public'
 PUBLISHED_DIR = ROOT / 'content' / 'published'
+PREVIEW_DIR = ROOT / '.preview'
 POST_TEMPLATE_PATH = ROOT / 'templates' / 'post.html'
 INDEX_TEMPLATE_PATH = ROOT / 'templates' / 'index.html'
 
-REQUIRED_FIELDS = ['title', 'slug', 'date', 'summary', 'description', 'body_html']
+REQUIRED_FIELDS = [
+    'title', 'slug', 'date', 'summary', 'description', 'body_html',
+    'hero_image', 'hero_alt',
+]
 
 
 @dataclass
@@ -27,7 +32,7 @@ class Payload:
     summary: str
     description: str
     body_html: str
-    hero_image: str | None
+    hero_image: str
     hero_alt: str
     source_repos: list[str]
     covered_topics: list[str]
@@ -52,6 +57,16 @@ def normalize_asset_path(path: str | None) -> str | None:
     return normalized or None
 
 
+def resolve_public_asset(path: str) -> Path:
+    asset_path = (PUBLIC_DIR / path).resolve()
+    public_root = PUBLIC_DIR.resolve()
+    if public_root not in asset_path.parents:
+        raise SystemExit('hero_image must be a relative path inside public/')
+    if not asset_path.is_file():
+        raise SystemExit(f'hero_image does not exist: {asset_path}')
+    return asset_path
+
+
 def parse_payload(path: Path) -> Payload:
     raw = load_json(path)
     missing = [field for field in REQUIRED_FIELDS if not raw.get(field)]
@@ -64,7 +79,7 @@ def parse_payload(path: Path) -> Payload:
         summary=raw['summary'].strip(),
         description=raw['description'].strip(),
         body_html=raw['body_html'].strip(),
-        hero_image=normalize_asset_path(raw.get('hero_image')),
+        hero_image=normalize_asset_path(raw.get('hero_image')) or '',
         hero_alt=(raw.get('hero_alt') or 'FlowBoard article hero image').strip(),
         source_repos=list(raw.get('source_repos') or ['/Users/jweese/code/flow-board']),
         covered_topics=list(raw.get('covered_topics') or []),
@@ -215,6 +230,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(description='Render a FlowBoard blog post and update index + ledger.')
     parser.add_argument('payload', nargs='?', help='Path to article payload JSON')
     parser.add_argument('--dry-run', action='store_true', help='Validate and print target paths without writing files')
+    parser.add_argument('--preview', action='store_true', help='Render review HTML without updating public files, index, archive, or ledger')
     parser.add_argument('--init-index', action='store_true', help='Write an empty index from current ledger state')
     args = parser.parse_args()
 
@@ -233,6 +249,7 @@ def main() -> None:
 
     payload_path = Path(args.payload).expanduser().resolve()
     payload = parse_payload(payload_path)
+    hero_source = resolve_public_asset(payload.hero_image)
     filename = build_post_filename(payload)
     public_path = PUBLIC_DIR / filename
     archive_path = PUBLISHED_DIR / filename
@@ -250,6 +267,17 @@ def main() -> None:
         return
 
     html = render_post(payload)
+
+    if args.preview:
+        PREVIEW_DIR.mkdir(parents=True, exist_ok=True)
+        preview_path = PREVIEW_DIR / filename
+        preview_path.write_text(html)
+        preview_asset = PREVIEW_DIR / payload.hero_image
+        preview_asset.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(hero_source, preview_asset)
+        print(preview_path)
+        return
+
     public_path.write_text(html)
     archive_path.write_text(html)
 

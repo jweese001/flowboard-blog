@@ -2,15 +2,13 @@
   "last_published_at": "2026-08-10",
   "last_public_url": null,
   "covered_commits": {
-    "flow-board": null
+    "flow-board": "ceec0c88ebfeb47c3fef87c186a345473d056870,0c866f686c7a61e93cc2672487d8915a66f23054,9dd59e3ef08fad8709a6f99663fd192cdb999ac7"
   },
   "covered_topics": [
-    "scene-node",
-    "reference-driven-rendering",
-    "3d-block-in",
-    "composition-control",
-    "iterative-refinement",
-    "page-node"
+    "desktop-local-workspace",
+    "native-file-io",
+    "project-save-workflows",
+    "cross-platform-downloads"
   ],
   "posts": [
     {
@@ -58,6 +56,21 @@
         "product-distribution",
         "desktop-downloads",
         "toolchain-packaging"
+      ]
+    },
+    {
+      "title": "FlowBoard's Desktop App Becomes a Real Local Workspace",
+      "date": "2026-08-10",
+      "summary": "Recent desktop work makes FlowBoard behave less like a wrapped web app and more like a usable local tool, with native project open/save flows, script file I/O, and working asset downloads.",
+      "filename": "2026-08-10-flowboard-desktop-app-becomes-a-real-local-workspace.html",
+      "public_url": null,
+      "hero_image": "images/flowboard-desktop-local-workspace.png",
+      "hero_alt": "FlowBoard workspace showing native New, Save, Save As, Open, and Import controls beside a large connected creative scene graph.",
+      "covered_topics": [
+        "desktop-local-workspace",
+        "native-file-io",
+        "project-save-workflows",
+        "cross-platform-downloads"
       ]
     },
     {
