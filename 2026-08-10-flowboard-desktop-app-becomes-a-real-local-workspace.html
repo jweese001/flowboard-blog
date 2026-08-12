@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FlowBoard&#x27;s Desktop App Becomes a Real Local Workspace | FlowBoard Blog</title>
+    <meta name="description" content="A FlowBoard product note on the desktop app&#x27;s move toward practical local-first use through native dialogs, path-based project handles, and cross-platform download behavior.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&family=Sora:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --font-display: 'Instrument Serif', Georgia, serif;
+            --font-body: 'Sora', system-ui, sans-serif;
+            --font-mono: 'JetBrains Mono', 'SF Mono', monospace;
+
+            --text-4xl: clamp(2rem, 1.5rem + 2.5vw, 3.5rem);
+            --text-2xl: clamp(1.25rem, 1rem + 1.25vw, 1.75rem);
+            --text-xl: clamp(1.1rem, 1rem + .5vw, 1.35rem);
+            --text-base: clamp(1rem, 0.95rem + 0.25vw, 1.1rem);
+            --text-sm: clamp(.875rem, .8rem + .25vw, .95rem);
+            --text-xs: clamp(.75rem, .7rem + .2vw, .85rem);
+
+            --bg-dark: rgb(10, 10, 10);
+            --bg-dark-elevated: rgb(18, 18, 18);
+            --bg-dark-card: rgb(22, 22, 22);
+
+            --text-on-dark: #ffffff;
+            --text-on-dark-muted: rgba(255, 255, 255, .75);
+            --text-on-dark-subtle: rgba(255, 255, 255, .5);
+
+            --accent: #c77dcd;
+            --accent-teal: #9dd9d9;
+
+            --border-dark-subtle: rgba(255, 255, 255, .08);
+
+            --space-sm: .5rem;
+            --space-md: 1rem;
+            --space-lg: 1.5rem;
+            --space-xl: 2rem;
+            --space-2xl: 3rem;
+            --space-3xl: 4rem;
+
+            --content-width: 720px;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            font-size: 16px;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body {
+            font-family: var(--font-body);
+            font-size: var(--text-base);
+            line-height: 1.75;
+            background: var(--bg-dark);
+            color: var(--text-on-dark-muted);
+            min-height: 100vh;
+        }
+
+        a { color: var(--accent); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+
+        .devlog-post {
+            max-width: var(--content-width);
+            margin: 0 auto;
+            padding: var(--space-3xl) var(--space-xl);
+        }
+
+        .eyebrow {
+            font-family: var(--font-mono);
+            font-size: var(--text-xs);
+            color: var(--accent-teal);
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            margin-bottom: var(--space-md);
+        }
+
+        .devlog-post header {
+            margin-bottom: var(--space-2xl);
+        }
+
+        .devlog-post h1 {
+            font-family: var(--font-display);
+            font-size: var(--text-4xl);
+            font-weight: 400;
+            line-height: 1.15;
+            color: var(--text-on-dark);
+            margin-bottom: var(--space-md);
+        }
+
+        .dek {
+            font-size: var(--text-xl);
+            color: var(--text-on-dark-muted);
+            margin-bottom: var(--space-md);
+        }
+
+        .devlog-post time,
+        .meta-heading,
+        .topic-chip {
+            font-family: var(--font-mono);
+            font-size: var(--text-xs);
+            color: var(--text-on-dark-subtle);
+            letter-spacing: .05em;
+            text-transform: uppercase;
+        }
+
+        .hero-image {
+            width: 100%;
+            border-radius: 8px;
+            margin: var(--space-2xl) 0;
+            display: block;
+            object-fit: cover;
+            aspect-ratio: 16 / 9;
+            background: linear-gradient(135deg, var(--bg-dark-elevated) 0%, var(--bg-dark-card) 100%);
+        }
+
+        .content h2 {
+            font-family: var(--font-display);
+            font-size: var(--text-2xl);
+            font-weight: 400;
+            color: var(--text-on-dark);
+            margin-top: var(--space-2xl);
+            margin-bottom: var(--space-lg);
+        }
+
+        .content p,
+        .content ul,
+        .content ol,
+        .content pre,
+        .content blockquote {
+            margin-bottom: calc(var(--space-lg) + .15rem);
+        }
+
+        .content ul,
+        .content ol {
+            padding-left: var(--space-xl);
+        }
+
+        .content li {
+            margin-bottom: var(--space-sm);
+        }
+
+        .content img {
+            width: 100%;
+            border-radius: 8px;
+            margin: var(--space-lg) 0;
+            display: block;
+            background: linear-gradient(135deg, var(--bg-dark-elevated) 0%, var(--bg-dark-card) 100%);
+        }
+
+        .article-figure {
+            width: min(calc(100% + 5rem), 52rem);
+            margin: var(--space-xl) auto var(--space-2xl);
+            margin-left: min(-2.5rem, calc((52rem - 100%) / -2));
+            padding: .9rem;
+            border: 1px solid var(--border-dark-subtle);
+            border-radius: 12px;
+            background: var(--bg-dark-card);
+        }
+
+        .article-figure img {
+            margin: 0;
+            border-radius: 6px;
+        }
+
+        .article-figure figcaption {
+            margin-top: .85rem;
+            color: var(--text-on-dark-subtle);
+            font-size: var(--text-sm);
+            line-height: 1.6;
+        }
+
+        .content code {
+            font-family: var(--font-mono);
+            font-size: .9em;
+            background: var(--bg-dark-card);
+            padding: .15em .4em;
+            border-radius: 4px;
+            border: 1px solid var(--border-dark-subtle);
+        }
+
+        .content pre,
+        .callout,
+        blockquote {
+            font-family: var(--font-mono);
+            font-size: var(--text-sm);
+            background: var(--bg-dark-card);
+            padding: var(--space-lg);
+            border-radius: 8px;
+            border: 1px solid var(--border-dark-subtle);
+            overflow-x: auto;
+        }
+
+        .content pre code {
+            background: none;
+            padding: 0;
+            border: none;
+        }
+
+        .content strong {
+            color: var(--text-on-dark);
+            font-weight: 500;
+        }
+
+        .meta-block {
+            margin-top: var(--space-3xl);
+            padding-top: var(--space-xl);
+            border-top: 1px solid var(--border-dark-subtle);
+            display: grid;
+            gap: var(--space-lg);
+        }
+
+        .meta-row p {
+            margin-top: var(--space-sm);
+            color: var(--text-on-dark-muted);
+            font-size: var(--text-sm);
+        }
+
+        .topics {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-sm);
+            margin-top: var(--space-sm);
+        }
+
+        .topic-chip {
+            color: var(--accent-teal);
+            border: 1px solid var(--border-dark-subtle);
+            padding: 2px 8px;
+        }
+
+        footer {
+            margin-top: var(--space-3xl);
+            padding-top: var(--space-xl);
+            border-top: 1px solid var(--border-dark-subtle);
+        }
+
+        footer a {
+            font-family: var(--font-mono);
+            font-size: var(--text-sm);
+            color: var(--text-on-dark-subtle);
+        }
+
+        footer a:hover {
+            color: var(--accent);
+        }
+
+        @media (max-width: 768px) {
+            .devlog-post {
+                padding: var(--space-2xl) var(--space-lg);
+            }
+            .devlog-post h1 {
+                font-size: clamp(1.75rem, 1.25rem + 2vw, 2.5rem);
+            }
+            .article-figure {
+                width: 100%;
+                margin-left: 0;
+                padding: .75rem;
+            }
+            .content pre,
+            .callout,
+            blockquote {
+                font-size: var(--text-xs);
+                padding: var(--space-md);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .devlog-post {
+                padding: var(--space-xl) var(--space-md);
+            }
+            .devlog-post h1 {
+                font-size: clamp(1.5rem, 1rem + 2vw, 2rem);
+            }
+            .content h2 {
+                font-size: var(--text-xl);
+            }
+            .hero-image {
+                margin: var(--space-lg) calc(-1 * var(--space-md));
+                width: calc(100% + var(--space-xl));
+                border-radius: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <article class="devlog-post">
+        <header>
+            <div class="eyebrow">FlowBoard Blog</div>
+            <h1>FlowBoard&#x27;s Desktop App Becomes a Real Local Workspace</h1>
+            <p class="dek">Recent desktop work makes FlowBoard behave less like a wrapped web app and more like a usable local tool, with native project open/save flows, script file I/O, and working asset downloads.</p>
+            <time datetime="2026-08-10">August 10, 2026</time>
+        </header>
+
+        <img src="images/flowboard-desktop-local-workspace.png" alt="FlowBoard workspace showing native New, Save, Save As, Open, and Import controls beside a large connected creative scene graph." class="hero-image">
+
+        <section class="content">
+            <p>FlowBoard's desktop app now clears an important usability bar: it can behave like a real local workspace instead of a browser build trapped inside a desktop shell. The committed changes across the desktop bridge focus on a simple product promise: if a user opens a project, edits supporting text, or exports an output, those actions should work with native file behavior instead of relying on browser APIs that are missing or unreliable in the desktop webview.</p>
+<h2>Projects can open, save, and save as native files</h2>
+<p>The core improvement is in the desktop file workflow. <code>client/src/services/fileSystem.ts</code> now branches to Tauri-native dialogs and Rust-backed reads and writes when FlowBoard runs as a desktop app. That keeps the existing store logic intact while adding a path-based handle shim for desktop mode. The same layer also accepts both the newer <code>.flw</code> format and legacy <code>.flowboard.json</code> files, which makes the desktop path useful for current work without abandoning older projects.</p>
+<p>That sounds infrastructural, but it changes the product feel. Open, Save, and Save As are table-stakes behaviors for creative software. Once those actions map to native dialogs instead of browser-only file pickers, the desktop app becomes more credible as the place where ongoing FlowBoard work can actually live.</p>
+<h2>The script panel now fits the desktop model too</h2>
+<p>The same desktop pass extends to the Script Panel. In <code>client/src/components/panels/ScriptPanel.tsx</code>, markdown open/save now uses native dialogs and Rust I/O in Tauri mode, while preserving browser fallbacks for web users. That matters because the script panel is not just auxiliary text. It is part of how a FlowBoard project captures scene notes, structure, and graph-building context. If project files save cleanly but the writing surface does not, the desktop workflow still feels incomplete.</p>
+<p>By giving script editing the same local-file treatment as projects, FlowBoard is moving toward a more coherent desktop posture: the graph and its supporting text can both live on disk and be managed with the same user expectations people bring to desktop tools.</p>
+<h2>Exports and downloads stop failing silently on desktop</h2>
+<p>A second practical gap was asset export. The committed desktop download helper in <code>client/src/lib/downloadFile.ts</code> addresses a platform-specific problem directly: WKWebView ignores anchor-tag downloads, which meant desktop download buttons could become no-ops. FlowBoard now routes image exports, page and comp PNG downloads, lightbox saves, and video downloads through a shared native save dialog path on desktop while keeping the usual browser behavior on the web.</p>
+<p>This is a good product change because it treats export as a first-class action rather than an afterthought. A desktop app for image workflows has to let people keep the things they made. Once downloads work consistently for rendered images and derived assets, the desktop version becomes much closer to a dependable handoff point between graph work and the rest of a creator's local pipeline.</p>
+<h2>The bigger shift is local-first credibility</h2>
+<p>Taken together, these commits show a product direction that is broader than any one dialog box. FlowBoard is adapting its UX to the realities of desktop runtime boundaries instead of pretending the browser implementation can simply be embedded unchanged. Scene and FX nodes already expose backend choices more explicitly; this desktop work does the same for file ownership and export behavior.</p>
+<p>The result is not just technical compatibility. It is a more believable local-first editing environment: projects open from disk, scripts save where users expect, and generated assets can be exported without webview-specific breakage. That is the kind of invisible product work that makes the rest of the toolchain easier to trust.</p>
+        </section>
+
+        <section class="meta-block">
+            <div class="meta-row">
+                <div class="meta-heading">Source repos</div>
+                <p>/Users/jweese/code/flow-board</p>
+            </div>
+            <div class="meta-row">
+                <div class="meta-heading">Covered topics</div>
+                <div class="topics">
+                    <span class="topic-chip">desktop local workspace</span><span class="topic-chip">native file io</span><span class="topic-chip">project save workflows</span><span class="topic-chip">cross platform downloads</span>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <a href="./index.html">← Back to FlowBoard Blog</a>
+        </footer>
+    </article>
+</body>
+</html>
