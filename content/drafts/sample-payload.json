@@ -7,9 +7,7 @@
   "body_html": "<p>Replace this with real article HTML generated from a review-gated editorial pass.</p>",
   "hero_image": "",
   "hero_alt": "Placeholder image",
-  "source_repos": [
-    "/Users/jweese/code/flow-board"
-  ],
+  "source_repos": [],
   "covered_topics": [
     "publisher-scaffold"
   ],

@@ -81,7 +81,7 @@ def parse_payload(path: Path) -> Payload:
         body_html=raw['body_html'].strip(),
         hero_image=normalize_asset_path(raw.get('hero_image')) or '',
         hero_alt=(raw.get('hero_alt') or 'FlowBoard article hero image').strip(),
-        source_repos=list(raw.get('source_repos') or ['/Users/jweese/code/flow-board']),
+        source_repos=list(raw.get('source_repos') or []),
         covered_topics=list(raw.get('covered_topics') or []),
         covered_commits=dict(raw.get('covered_commits') or {'flow-board': None}),
         public_base_url=(raw.get('public_base_url') or '').strip() or None,
