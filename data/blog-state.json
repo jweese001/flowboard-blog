@@ -1,14 +1,16 @@
 {
   "last_published_at": "2026-08-10",
-  "last_public_url": null,
+  "last_public_url": "https://jweese001.github.io/flowboard-blog/2026-08-10-how-flowboard-turns-a-houseboat-block-in-into-a-vintage-photo.html",
   "covered_commits": {
-    "flow-board": "ceec0c88ebfeb47c3fef87c186a345473d056870,0c866f686c7a61e93cc2672487d8915a66f23054,9dd59e3ef08fad8709a6f99663fd192cdb999ac7"
+    "flow-board": null
   },
   "covered_topics": [
-    "desktop-local-workspace",
-    "native-file-io",
-    "project-save-workflows",
-    "cross-platform-downloads"
+    "scene-node",
+    "reference-driven-rendering",
+    "3d-block-in",
+    "composition-control",
+    "iterative-refinement",
+    "page-node"
   ],
   "posts": [
     {
@@ -16,7 +18,7 @@
       "date": "2026-08-10",
       "summary": "The authenticated FlowBoard dashboard project for the Houseboat demo shows a compact but complete workflow: Scene capture, reference-driven outputs, page layout, and a final refinement pass that keeps composition stable while changing medium.",
       "filename": "2026-08-10-how-flowboard-turns-a-houseboat-block-in-into-a-vintage-photo.html",
-      "public_url": null,
+      "public_url": "https://jweese001.github.io/flowboard-blog/2026-08-10-how-flowboard-turns-a-houseboat-block-in-into-a-vintage-photo.html",
       "hero_image": "images/flowboard-houseboat-dashboard-refined-render-hero.jpg",
       "hero_alt": "Refined vintage-style houseboat render generated from a FlowBoard scene-capture and reference-driven workflow",
       "covered_topics": [
@@ -33,7 +35,7 @@
       "date": "2026-08-10",
       "summary": "FlowBoard now lets Scene and FX nodes stay in the same graph while switching between the ThreeJS IDE, Blender, and local or manual fallbacks.",
       "filename": "2026-08-10-flowboard-turns-scene-and-fx-nodes-into-multi-backend-tools.html",
-      "public_url": null,
+      "public_url": "https://jweese001.github.io/flowboard-blog/2026-08-10-flowboard-turns-scene-and-fx-nodes-into-multi-backend-tools.html",
       "hero_image": "images/flowboard-multi-backend-hero.jpg",
       "hero_alt": "FlowBoard graph nodes switching between IDE, Blender, and local backends",
       "covered_topics": [
@@ -48,7 +50,7 @@
       "date": "2026-08-10",
       "summary": "FlowBoard's dashboard now acts more like a product hub, collecting the desktop app, installable skills, the ThreeJS IDE, and the Blender Bridge add-on in one subscriber-facing resources area.",
       "filename": "2026-08-10-flowboard-gathers-its-tools-into-subscriber-resources.html",
-      "public_url": null,
+      "public_url": "https://jweese001.github.io/flowboard-blog/2026-08-10-flowboard-gathers-its-tools-into-subscriber-resources.html",
       "hero_image": "images/flowboard-subscriber-resources-hero.jpg",
       "hero_alt": "FlowBoard dashboard resource cards for desktop, skills, ThreeJS IDE, and Blender Bridge",
       "covered_topics": [
@@ -63,7 +65,7 @@
       "date": "2026-08-10",
       "summary": "Recent desktop work makes FlowBoard behave less like a wrapped web app and more like a usable local tool, with native project open/save flows, script file I/O, and working asset downloads.",
       "filename": "2026-08-10-flowboard-desktop-app-becomes-a-real-local-workspace.html",
-      "public_url": null,
+      "public_url": "https://jweese001.github.io/flowboard-blog/2026-08-10-flowboard-desktop-app-becomes-a-real-local-workspace.html",
       "hero_image": "images/flowboard-desktop-local-workspace.png",
       "hero_alt": "FlowBoard workspace showing native New, Save, Save As, Open, and Import controls beside a large connected creative scene graph.",
       "covered_topics": [
@@ -78,7 +80,7 @@
       "date": "2026-06-28",
       "summary": "A migrated seed post about turning FlowBoard workflows into reference-aware scene plans instead of isolated prompt fragments.",
       "filename": "2026-06-28-teaching-flowboard-to-remember-the-scene.html",
-      "public_url": null,
+      "public_url": "https://jweese001.github.io/flowboard-blog/2026-06-28-teaching-flowboard-to-remember-the-scene.html",
       "hero_image": "images/flowboard-visual-memory-hero.jpg",
       "hero_alt": "A FlowBoard-style visual workflow for AI image generation with scene nodes and references",
       "covered_topics": [

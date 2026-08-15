@@ -34,12 +34,9 @@ flowboard-blog/
 ```
 
 Planned source policy
-- Primary source repo: `/Users/jweese/code/flow-board`
-- Supporting repos, only when directly relevant to the story:
-  - `/Users/jweese/code/flowboard-skills`
-  - `/Users/jweese/code/dev-projects/flowboard-skills`
-  - `/Users/jweese/code/creative-pipelines/screen-plays`
-  - `/Users/jweese/code/creative-pipelines/patient-education`
+- Primary source repo: [flow-board](https://github.com/jweese001/flow-board)
+- Supporting repos, only when directly relevant to the story: flowboard-skills,
+  screen-plays, patient-education (local clones; locations vary by machine).
 - Durable screenshot/story evidence should come from exported assets or a future read-only journal/export path, not from scraping a privileged browser session.
 
 Publishing model
@@ -59,7 +56,7 @@ Auth recommendation
 
 Quick start
 ```bash
-cd /Users/jweese/code/flowboard-blog
+cd flowboard-blog
 python3 scripts/publish_flowboard_update.py --help
 
 # Render a human-readable draft without publishing or changing the ledger:
@@ -67,6 +64,7 @@ python3 scripts/publish_flowboard_update.py --preview content/drafts/example.jso
 ```
 
 Suggested next steps
-- Decide the public base URL.
-- Add a second migrated or hand-authored post so the index has a sequence.
 - After reviewing a few draft-only cron runs, choose whether to add commit/push automation and live URL verification.
+
+The public base URL is `https://jweese001.github.io/flowboard-blog` (the publish script's
+default; a payload's `public_base_url` field overrides it).

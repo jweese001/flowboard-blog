@@ -3,7 +3,7 @@
 This blog should not depend on a privileged interactive browser session.
 
 Preferred evidence sources
-1. Public repo history and docs in `/Users/jweese/code/flow-board`
+1. Public repo history and docs in the local [flow-board](https://github.com/jweese001/flow-board) clone
 2. Exported screenshots/assets committed or copied into this repo
 3. A future FlowBoard journal/export surface designed for publication
 4. A dedicated low-privilege service account, if account-backed inspection becomes necessary

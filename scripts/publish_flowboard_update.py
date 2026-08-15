@@ -11,6 +11,7 @@ from pathlib import Path
 from typing import Any
 
 ROOT = Path(__file__).resolve().parent.parent
+DEFAULT_BASE_URL = 'https://jweese001.github.io/flowboard-blog'
 DATA_PATH = ROOT / 'data' / 'blog-state.json'
 PUBLIC_DIR = ROOT / 'public'
 PUBLISHED_DIR = ROOT / 'content' / 'published'
@@ -84,7 +85,7 @@ def parse_payload(path: Path) -> Payload:
         source_repos=list(raw.get('source_repos') or []),
         covered_topics=list(raw.get('covered_topics') or []),
         covered_commits=dict(raw.get('covered_commits') or {'flow-board': None}),
-        public_base_url=(raw.get('public_base_url') or '').strip() or None,
+        public_base_url=(raw.get('public_base_url') or '').strip() or DEFAULT_BASE_URL,
     )
 
 
@@ -128,9 +129,43 @@ def render_tags(topics: list[str], limit: int = 2) -> str:
     )
 
 
+def og_meta_html(title: str, description: str, url: str | None,
+                 image_url: str | None, og_type: str = 'article') -> str:
+    lines = [
+        f'    <meta property="og:type" content="{og_type}">',
+        '    <meta property="og:site_name" content="FlowBoard Blog">',
+        f'    <meta property="og:title" content="{escape(title)}">',
+        f'    <meta property="og:description" content="{escape(description)}">',
+    ]
+    if url:
+        lines.append(f'    <meta property="og:url" content="{escape(url)}">')
+        lines.append(f'    <link rel="canonical" href="{escape(url)}">')
+    if image_url:
+        lines.append(f'    <meta property="og:image" content="{escape(image_url)}">')
+        lines.append('    <meta name="twitter:card" content="summary_large_image">')
+        lines.append(f'    <meta name="twitter:image" content="{escape(image_url)}">')
+    else:
+        lines.append('    <meta name="twitter:card" content="summary">')
+    return '\n'.join(lines)
+
+
+def absolute_url(base_url: str | None, path: str | None) -> str | None:
+    if not base_url or not path:
+        return None
+    return f"{base_url.rstrip('/')}/{path.lstrip('/')}"
+
+
 def render_post(payload: Payload) -> str:
     template = POST_TEMPLATE_PATH.read_text()
+    filename = build_post_filename(payload)
+    og_meta = og_meta_html(
+        f'{payload.title} | FlowBoard Blog',
+        payload.description,
+        absolute_url(payload.public_base_url, filename),
+        absolute_url(payload.public_base_url, payload.hero_image),
+    )
     return render(template, {
+        'og_meta': og_meta,
         'title': escape(payload.title),
         'description': escape(payload.description),
         'summary': escape(payload.summary),
@@ -177,6 +212,15 @@ def post_card_html(post: dict[str, Any]) -> str:
 
 def render_index(posts: list[dict[str, Any]]) -> str:
     template = INDEX_TEMPLATE_PATH.read_text()
+    featured_hero = posts[0].get('hero_image') if posts else None
+    og_meta = og_meta_html(
+        'FlowBoard Blog',
+        'Focused product writing about FlowBoard.',
+        DEFAULT_BASE_URL + '/',
+        absolute_url(DEFAULT_BASE_URL, featured_hero),
+        og_type='website',
+    )
+    template = render(template, {'og_meta': og_meta})
     if not posts:
         posts_html = (
             '<section class="featured-section">'

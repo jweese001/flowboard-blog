@@ -36,9 +36,8 @@ Cleaned 2026-08-15: the field was removed from `templates/post.html`, stripped f
 pages in `public/` and `content/published/`, cleared from every draft JSON, and the hardcoded
 default removed from `scripts/publish_flowboard_update.py`.
 
-Still containing local paths, left deliberately (operational docs, not rendered output):
-`README.md`, `.env.flowboard.example`, `notes/auth-and-source-strategy.md`. Worth cleaning; they
-are visible on GitHub.
+Second pass 2026-08-15: local paths also removed from the operational docs —
+`README.md`, `.env.flowboard.example`, `notes/auth-and-source-strategy.md`. Keep them out.
 
 ### Voice
 
