@@ -1,18 +1,35 @@
 {
-  "last_published_at": "2026-08-10",
-  "last_public_url": "https://jweese001.github.io/flowboard-blog/2026-08-10-how-flowboard-turns-a-houseboat-block-in-into-a-vintage-photo.html",
+  "last_published_at": "2026-09-01",
+  "last_public_url": "https://jweese001.github.io/flowboard-blog/2026-09-01-how-the-red-ferrari-night-held-together.html",
   "covered_commits": {
     "flow-board": null
   },
   "covered_topics": [
-    "scene-node",
-    "reference-driven-rendering",
-    "3d-block-in",
-    "composition-control",
-    "iterative-refinement",
-    "page-node"
+    "script panel",
+    "build graph",
+    "character references",
+    "consistency",
+    "page layout",
+    "cinezine"
   ],
   "posts": [
+    {
+      "title": "How the Red Ferrari Night Held Together",
+      "date": "2026-09-01",
+      "summary": "Thirty-five frames of one night in 1979, and the part that actually makes them agree with each other: the cast and the rooms, defined once and wired into every shot that needs them.",
+      "filename": "2026-09-01-how-the-red-ferrari-night-held-together.html",
+      "public_url": "https://jweese001.github.io/flowboard-blog/2026-09-01-how-the-red-ferrari-night-held-together.html",
+      "hero_image": "images/black-cat-act-a-hero.jpg",
+      "hero_alt": "Close-up of seven-year-old Mason's face at night, red taillight glow reflected in his eyes, from Act A of You Think You're the Black Cat",
+      "covered_topics": [
+        "script panel",
+        "build graph",
+        "character references",
+        "consistency",
+        "page layout",
+        "cinezine"
+      ]
+    },
     {
       "title": "How FlowBoard Turns a Houseboat Block-In into a Vintage Photo",
       "date": "2026-08-10",

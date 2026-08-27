@@ -43,6 +43,9 @@ Second pass 2026-08-15: local paths also removed from the operational docs —
 
 Write as the person who built and used the thing. First person, concrete, unhyped.
 
+- **No em dashes.** The author writes complete, conventionally punctuated sentences. Use a
+  period, comma, colon, or semicolon instead. Screenplay sluglines use a plain hyphen
+  ("PORCH - NIGHT"). Grep drafts for `—` and `&mdash;`; the count must be zero.
 - **No meta-commentary.** Never describe the post from inside the post ("that makes this post
   stronger because…"). Say the thing; don't grade it.
 - **No process narration.** How the material was gathered is not interesting to the reader.
