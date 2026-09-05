@@ -8,8 +8,18 @@ Static blog for FlowBoard, published to GitHub Pages at
 ```
 content/drafts/<date>-<slug>.json   →  scripts/publish_flowboard_update.py
     →  templates/post.html + templates/index.html
-    →  public/*.html  (what GitHub Pages serves)
+    →  public/*.html  (the built site)
     →  content/published/*.html  (archived copy)
+```
+
+**Deploy step (easy to miss):** GitHub Pages serves the **`gh-pages` branch**, not `main`.
+Pushing `main` does NOT deploy. To publish, copy `public/`'s contents onto `gh-pages` and push:
+
+```bash
+git worktree add -B gh-pages /tmp/ghp origin/gh-pages
+rsync -a --delete --exclude .git public/ /tmp/ghp/
+cd /tmp/ghp && git add -A && git commit -m "Publish: <what>" && git push origin gh-pages
+cd - && git worktree remove /tmp/ghp
 ```
 
 `data/blog-state.json` tracks what has been published. Images live in `public/images/`.
