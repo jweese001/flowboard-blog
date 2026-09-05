@@ -3,17 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Teaching FlowBoard to Remember the Scene | FlowBoard Blog</title>
-    <meta name="description" content="A FlowBoard product note on visual memory, reference-aware workflows, and continuity in AI image pipelines.">
+    <title>How the Red Ferrari Night Held Together | FlowBoard Blog</title>
+    <meta name="description" content="A companion to Episode A of You Think You&#x27;re the Black Cat: how a chapter of prose became a screenplay, a node graph, thirty-five frames, and a self-contained episode.">
     <meta property="og:type" content="article">
     <meta property="og:site_name" content="FlowBoard Blog">
-    <meta property="og:title" content="Teaching FlowBoard to Remember the Scene | FlowBoard Blog">
-    <meta property="og:description" content="A FlowBoard product note on visual memory, reference-aware workflows, and continuity in AI image pipelines.">
-    <meta property="og:url" content="https://jweese001.github.io/flowboard-blog/2026-06-28-teaching-flowboard-to-remember-the-scene.html">
-    <link rel="canonical" href="https://jweese001.github.io/flowboard-blog/2026-06-28-teaching-flowboard-to-remember-the-scene.html">
-    <meta property="og:image" content="https://jweese001.github.io/flowboard-blog/images/flowboard-visual-memory-hero.jpg">
+    <meta property="og:title" content="How the Red Ferrari Night Held Together | FlowBoard Blog">
+    <meta property="og:description" content="A companion to Episode A of You Think You&#x27;re the Black Cat: how a chapter of prose became a screenplay, a node graph, thirty-five frames, and a self-contained episode.">
+    <meta property="og:url" content="https://jweese001.github.io/flowboard-blog/2026-09-05-how-the-red-ferrari-night-held-together.html">
+    <link rel="canonical" href="https://jweese001.github.io/flowboard-blog/2026-09-05-how-the-red-ferrari-night-held-together.html">
+    <meta property="og:image" content="https://jweese001.github.io/flowboard-blog/images/black-cat-act-a-hero.jpg">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content="https://jweese001.github.io/flowboard-blog/images/flowboard-visual-memory-hero.jpg">
+    <meta name="twitter:image" content="https://jweese001.github.io/flowboard-blog/images/black-cat-act-a-hero.jpg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&family=Sora:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -304,34 +304,75 @@
     <article class="devlog-post">
         <header>
             <div class="eyebrow">FlowBoard Blog</div>
-            <h1>Teaching FlowBoard to Remember the Scene</h1>
-            <p class="dek">A migrated seed post about turning FlowBoard workflows into reference-aware scene plans instead of isolated prompt fragments.</p>
-            <time datetime="2026-06-28">June 28, 2026</time>
+            <h1>How the Red Ferrari Night Held Together</h1>
+            <p class="dek">Thirty-five frames of one night in 1979, and the part that actually makes them agree with each other: the cast and the rooms, defined once and wired into every shot that needs them.</p>
+            <time datetime="2026-09-05">September 05, 2026</time>
         </header>
 
-        <img src="images/flowboard-visual-memory-hero.jpg" alt="A FlowBoard-style visual workflow for AI image generation with scene nodes and references" class="hero-image">
+        <img src="images/black-cat-act-a-hero.jpg" alt="Close-up of seven-year-old Mason&#x27;s face at night, red taillight glow reflected in his eyes, from Act A of You Think You&#x27;re the Black Cat" class="hero-image">
 
         <section class="content">
-            <p>This seed post is migrated from the earlier w33s3 devlog because it captures a core FlowBoard idea that belongs in a dedicated product publication: visual memory. The work itself happened inside one of my creative pipeline repos, but the real subject was product behavior — how FlowBoard should carry continuity across a sequence of generated images instead of treating every prompt like a fresh start.</p>
-<p>The problem is familiar if you have ever tried to generate a run of related images with AI. You can describe the same character, room, prop, and mood over and over and still watch the system drift. Faces change. Environments flatten out. The same scene starts to feel like a set of cousins instead of a coherent visual world. FlowBoard already helps by splitting prompts into reusable parts, but this iteration pushed further: those parts should remember actual references, not just text.</p>
-<h2>From prompt fragments to reference-aware workflows</h2>
-<p>The most important change was wiring explicit reference nodes into several FlowBoard JSON workflows. Instead of only connecting style, camera, action, setting, and text nodes, I started attaching portrait references for characters and image references for locations directly into the graph. That turns a workflow into something closer to a visual dependency map. A character node is no longer just a prose description. It can now be anchored to a specific portrait. A setting can now point at a real image of the room or location it is meant to preserve.</p>
-<p>That sounds like a small structural change, but it shifts the product model. A node graph should not just be a prettier prompt editor. It should be the place where continuity lives. When I revisit a workflow later, I want to see not only what I asked the model for, but what evidence I gave it.</p>
-<figure class="article-figure"><a href="images/flowboard-reference-workflow-graph.png"><img src="images/flowboard-reference-workflow-graph.png" alt="FlowBoard project graph showing character, setting, shot, action, output, and page nodes connected across a full workflow"></a><figcaption>A representative FlowBoard project canvas makes the continuity model visible: reusable character, setting, and shot decisions stay attached to the graph instead of disappearing into one-off prompts.</figcaption></figure>
-<h2>Upgrading the generation path</h2>
-<p>I also updated these workflows to target <code>gemini-3-pro-image-preview</code> instead of the older <code>gemini-pro</code> configuration. Some of that work is just richer project structure, but the meaningful shift is that the projects now preserve more information about model choice and reference connections. In practice, I am preparing FlowBoard for a generation path where reference fidelity matters more than clever prose.</p>
-<p>That makes the system easier to reason about. If I am building a montage image and I care about the same character appearing across multiple beats, the workflow should show that requirement explicitly. It should not be hidden in a paragraph and left up to luck.</p>
-<h2>Why this belongs in a standalone FlowBoard blog</h2>
-<p>This is exactly the kind of update that tends to get undersold in a general portfolio devlog. It is not a flashy front-page feature, but it is real product work. FlowBoard gets more useful when it becomes a system for composing repeatable image logic rather than a set of one-off prompts wrapped in boxes.</p>
-<p>The next step is making this less manual: clearer reference handling, better continuity tooling, and workflows that can explain why an output stayed on model or drifted off. That is slower work than a splashy feature sprint, but it is the kind of foundation that makes the rest of the product believable.</p>
-<p>If FlowBoard is going to be useful for narrative image pipelines, it has to remember who is in the scene, where they are, and what visual world they belong to. This post is a good first seed for the standalone blog because it states that goal plainly.</p>
+            <p>Thirty-five frames, one night, a seven-year-old and his father. The boy has to be the same boy in all thirty-five. His father has to be the same man. The club has to be the same room from the door to the bar to the backstage hallway. That means the bar you glimpse over a shoulder in frame 19 has to be the bar you are standing at in frame 22.</p>
+
+<p>That is the whole problem. Not making a good image. Making the thirty-fifth image agree with the first.</p>
+
+<h2>Start with the script</h2>
+
+<p>The scene came out of Chapter One of a novel I have been failing to finish since 2023. The chapter is fiction told in the narrator's voice: Mason is seven the night his father turns up at his grandparents' house in a brand new Ferrari, red and gleaming under the streetlights.</p>
+
+<p>That is not shootable. So it gets adapted into a screenplay: scene headings, shot IDs, and reference tables for the cast, the settings, and the style.</p>
+
+<pre><code>### SCENE A-1: GRANDPARENTS' PORCH - NIGHT
+
+**WIDE SHOT** establishing a modest Grant Park Victorian. Warm yellow
+light spills from windows onto a manicured lawn.
+
+| ID   | Preset       | Description                                 |
+| A1-1 | establishing | Victorian house at night, warm window light |
+| A1-4 | close-up     | Mason's face, red taillights in his pupils  |</code></pre>
+
+<p>Thirty-five shots for the act. Each one gets a framing preset: establishing, tracking, two-shot, extreme-close-up. Framing is a decision you make once, in writing, rather than thirty-five times in a prompt box.</p>
+
+<h2>Then the graph builds itself</h2>
+
+<p>The screenplay opens in a panel beside the canvas. Build Graph reads the tables and lays out the scene: every character becomes a node, every setting becomes a node, and every row in the scene's shots table becomes its own wired lane that runs shot into action into output, with the camera and the era wired into each output's config.</p>
+
+<p>It works a scene at a time, and what it hands you is not finished. It is scaffolding: exactly what you want before the interesting decisions start.</p>
+
+<p>You could render straight off the scaffold. In practice, this is where the work moves into the graph: tightening a shot, swapping a preset, rewiring a reference until the tree gives you the frame the scene deserves. Build Graph is a get-everything-started-for-me button, not a one-click-and-done button. What it takes off your hands is dragging boxes around, the part that never deserved an afternoon in the first place.</p>
+
+<h2>The cast is the actual work</h2>
+
+<p>Here is where consistency is won or lost, and it is not won by prompting harder.</p>
+
+<p>Each character gets defined once, concretely, with wardrobe and posture instead of adjectives. Then you generate one clean full-body portrait on a plain background, and that portrait becomes a reference image wired back into the character node.</p>
+
+<p>From then on, every shot that pulls that character pulls the picture too. The model is not being asked to imagine a seven-year-old boy thirty-five separate times. It is being handed the same boy, thirty-five times, and told what he is doing.</p>
+
+<p>That is the difference between a tool that makes images and a tool that makes a sequence. The face does not drift because nobody re-described it.</p>
+
+<p>Settings get the same treatment. The club got a clean empty-room plate, with no people and no action, just the room with its stage and its bar and its string lights. Wire the plate into a shot and the club stays the club.</p>
+
+<h2>Pages, then a screening</h2>
+
+<p>Frames become pages, with panel layouts, per-panel crops, and gutters. The crops arrive as live sliders, so a panel that is cropping wrong is a drag rather than a regenerate.</p>
+
+<p>Then the whole act goes into Cinezine, where it becomes something you can hand to someone: cut the frames that do not earn their place, reorder, caption, pick a theme, and export one HTML file that opens anywhere with no server and no account.</p>
+
+<p>That file is <a href="https://blackcat.w33s3.com/act-a/">Episode A</a>. It is the same file whether you are reading it on a laptop or I am putting it on a screen in a room.</p>
+
+<h2>What it cost</h2>
+
+<p>Most of the wall-clock time went to the references, the portraits and the setting plates. Almost none went to the shots themselves, because by the time the references were wired the shots were mostly bookkeeping.</p>
+
+<p>This is something I did not expect when I started building this. The work is not at the end. It is all at the front, in deciding who these people are and what the settings look like. After that, the frames come cheap, because every one of them draws on the cast and the rooms you already built.</p>
         </section>
 
         <section class="meta-block">
             <div class="meta-row">
                 <div class="meta-heading">Covered topics</div>
                 <div class="topics">
-                    <span class="topic-chip">visual memory</span><span class="topic-chip">reference aware workflows</span><span class="topic-chip">continuity</span><span class="topic-chip">seed migration</span>
+                    <span class="topic-chip">script panel</span><span class="topic-chip">build graph</span><span class="topic-chip">character references</span><span class="topic-chip">consistency</span><span class="topic-chip">page layout</span><span class="topic-chip">cinezine</span>
                 </div>
             </div>
         </section>
