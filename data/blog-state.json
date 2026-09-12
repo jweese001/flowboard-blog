@@ -2,14 +2,14 @@
   "last_published_at": "2026-09-12",
   "last_public_url": "https://jweese001.github.io/flowboard-blog/2026-09-12-cycle-node-build-notes.html",
   "covered_commits": {
-    "flow-board": "ca1d692, f140663, 54a371e, a7a7b00, 67eb402, 3a82740, 30fe84d",
-    "flowboard-manual": "6fb80d5, 871b35c, 5241323, b8fa722, 737fad9"
+    "flow-board": null
   },
   "covered_topics": [
     "cycle-node",
-    "chroma-key",
-    "veo",
-    "manual"
+    "frame-based-animation",
+    "walk-cycles",
+    "comp-playback",
+    "reference-sequences"
   ],
   "posts": [
     {
@@ -50,8 +50,8 @@
       "summary": "A character sheet is a promise of motion. The Cycle node keeps it: turn a pinned pose into keyed frames, composite them over a background, then hand-pick the twelve that make a true loop.",
       "filename": "2026-08-30-from-character-sheet-to-walk-cycle.html",
       "public_url": "https://jweese001.github.io/flowboard-blog/2026-08-30-from-character-sheet-to-walk-cycle.html",
-      "hero_image": "images/cycle-pose-modal.png",
-      "hero_alt": "Full-screen pose inspector showing the character on a green background with the pose description visible",
+      "hero_image": "images/mason-sheet.jpg",
+      "hero_alt": "Character sheet for Mason from the Black Cat series, showing front, side, and three-quarter views with expression studies",
       "covered_topics": [
         "cycle-node",
         "frame-based-animation",
