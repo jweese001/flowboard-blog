@@ -126,7 +126,8 @@
             border-radius: 8px;
             margin: var(--space-2xl) 0;
             display: block;
-            object-fit: contain;
+            object-fit: cover;
+            object-position: center top;
             aspect-ratio: 16 / 9;
             background: linear-gradient(135deg, var(--bg-dark-elevated) 0%, var(--bg-dark-card) 100%);
         }
@@ -178,6 +179,19 @@
         .article-figure img {
             margin: 0;
             border-radius: 6px;
+        }
+
+        .article-figure--compact {
+            width: 100%;
+            margin-left: 0;
+            margin-right: 0;
+        }
+
+        .article-figure--compact img {
+            width: auto;
+            max-width: 100%;
+            margin: 0 auto;
+            display: block;
         }
 
         .article-figure figcaption {

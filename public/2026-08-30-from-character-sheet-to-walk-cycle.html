@@ -11,9 +11,9 @@
     <meta property="og:description" content="How the Cycle node turns a static character sheet into a loopable, keyed walk cycle inside the same FlowBoard graph you use for stills.">
     <meta property="og:url" content="https://jweese001.github.io/flowboard-blog/2026-08-30-from-character-sheet-to-walk-cycle.html">
     <link rel="canonical" href="https://jweese001.github.io/flowboard-blog/2026-08-30-from-character-sheet-to-walk-cycle.html">
-    <meta property="og:image" content="https://jweese001.github.io/flowboard-blog/images/mason-sheet.jpg">
+    <meta property="og:image" content="https://jweese001.github.io/flowboard-blog/images/mason-sheet-cropped.jpg">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content="https://jweese001.github.io/flowboard-blog/images/mason-sheet.jpg">
+    <meta name="twitter:image" content="https://jweese001.github.io/flowboard-blog/images/mason-sheet-cropped.jpg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&family=Sora:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -126,7 +126,8 @@
             border-radius: 8px;
             margin: var(--space-2xl) 0;
             display: block;
-            object-fit: contain;
+            object-fit: cover;
+            object-position: center top;
             aspect-ratio: 16 / 9;
             background: linear-gradient(135deg, var(--bg-dark-elevated) 0%, var(--bg-dark-card) 100%);
         }
@@ -326,7 +327,7 @@
             <time datetime="2026-08-30">August 30, 2026</time>
         </header>
 
-        <img src="images/mason-sheet.jpg" alt="Character sheet for Mason from the Black Cat series, showing front, side, and three-quarter views with expression studies" class="hero-image">
+        <img src="images/mason-sheet-cropped.jpg" alt="Character sheet for Mason, front and side views from the shoulders up, blond hair with a red streak" class="hero-image">
 
         <section class="content">
             <p>A character sheet is a promise of motion. You draw the front, the side, the three-quarter, the expressions, and every angle says the same thing: this person could walk out of the page. But a sheet does not walk. It sits there, fully specified and completely still, waiting for someone to do the part it cannot do itself.</p>
@@ -360,6 +361,8 @@
 <p>Keyed frames go into a Comp node, which plays them as a layer over a background. The background can be a still, and the character walks in front of a fixed room. Or the background can itself be moving.</p>
 
 <p>That last part came from teaching the Reference node's sequence mode to do more than scrub. A sequence used to be a storyboard you paged through by hand. Now a sequence plays as an animated Comp layer with its own frame rate, which means a moving background and a moving character are just two layers stacked with two edges between them. A background sequence and a walk cycle composite together the same way two stills would.</p>
+
+<figure class="article-figure"><img src="images/mason-walk-comp.gif" alt="Mason walking toward the camera, keyed frames composited over a background in a Comp node"><figcaption>The keyed cycle playing as a Comp layer. Two layers, two edges, one walk.</figcaption></figure>
 
 <h2>Then you export, and then you choose</h2>
 
