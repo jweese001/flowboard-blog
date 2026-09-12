@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cycle Node Build Notes | FlowBoard Blog</title>
+    <meta name="description" content="Build notes from the Cycle node: iterating at image prices before video prices, API drift, matte-edge despill, and moving GIF encoding off the main thread.">
+    <meta property="og:type" content="article">
+    <meta property="og:site_name" content="FlowBoard Blog">
+    <meta property="og:title" content="Cycle Node Build Notes | FlowBoard Blog">
+    <meta property="og:description" content="Build notes from the Cycle node: iterating at image prices before video prices, API drift, matte-edge despill, and moving GIF encoding off the main thread.">
+    <meta property="og:url" content="https://jweese001.github.io/flowboard-blog/2026-09-12-cycle-node-build-notes.html">
+    <link rel="canonical" href="https://jweese001.github.io/flowboard-blog/2026-09-12-cycle-node-build-notes.html">
+    <meta property="og:image" content="https://jweese001.github.io/flowboard-blog/images/cycle-graph.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://jweese001.github.io/flowboard-blog/images/cycle-graph.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&family=Sora:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --font-display: 'Instrument Serif', Georgia, serif;
+            --font-body: 'Sora', system-ui, sans-serif;
+            --font-mono: 'JetBrains Mono', 'SF Mono', monospace;
+
+            --text-4xl: clamp(2rem, 1.5rem + 2.5vw, 3.5rem);
+            --text-2xl: clamp(1.25rem, 1rem + 1.25vw, 1.75rem);
+            --text-xl: clamp(1.1rem, 1rem + .5vw, 1.35rem);
+            --text-base: clamp(1rem, 0.95rem + 0.25vw, 1.1rem);
+            --text-sm: clamp(.875rem, .8rem + .25vw, .95rem);
+            --text-xs: clamp(.75rem, .7rem + .2vw, .85rem);
+
+            --bg-dark: rgb(10, 10, 10);
+            --bg-dark-elevated: rgb(18, 18, 18);
+            --bg-dark-card: rgb(22, 22, 22);
+
+            --text-on-dark: #ffffff;
+            --text-on-dark-muted: rgba(255, 255, 255, .75);
+            --text-on-dark-subtle: rgba(255, 255, 255, .5);
+
+            --accent: #c77dcd;
+            --accent-teal: #9dd9d9;
+
+            --border-dark-subtle: rgba(255, 255, 255, .08);
+
+            --space-sm: .5rem;
+            --space-md: 1rem;
+            --space-lg: 1.5rem;
+            --space-xl: 2rem;
+            --space-2xl: 3rem;
+            --space-3xl: 4rem;
+
+            --content-width: 720px;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            font-size: 16px;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body {
+            font-family: var(--font-body);
+            font-size: var(--text-base);
+            line-height: 1.75;
+            background: var(--bg-dark);
+            color: var(--text-on-dark-muted);
+            min-height: 100vh;
+        }
+
+        a { color: var(--accent); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+
+        .devlog-post {
+            max-width: var(--content-width);
+            margin: 0 auto;
+            padding: var(--space-3xl) var(--space-xl);
+        }
+
+        .eyebrow {
+            font-family: var(--font-mono);
+            font-size: var(--text-xs);
+            color: var(--accent-teal);
+            letter-spacing: .1em;
+            text-transform: uppercase;
+            margin-bottom: var(--space-md);
+        }
+
+        .devlog-post header {
+            margin-bottom: var(--space-2xl);
+        }
+
+        .devlog-post h1 {
+            font-family: var(--font-display);
+            font-size: var(--text-4xl);
+            font-weight: 400;
+            line-height: 1.15;
+            color: var(--text-on-dark);
+            margin-bottom: var(--space-md);
+        }
+
+        .dek {
+            font-size: var(--text-xl);
+            color: var(--text-on-dark-muted);
+            margin-bottom: var(--space-md);
+        }
+
+        .devlog-post time,
+        .meta-heading,
+        .topic-chip {
+            font-family: var(--font-mono);
+            font-size: var(--text-xs);
+            color: var(--text-on-dark-subtle);
+            letter-spacing: .05em;
+            text-transform: uppercase;
+        }
+
+        .hero-image {
+            width: 100%;
+            border-radius: 8px;
+            margin: var(--space-2xl) 0;
+            display: block;
+            object-fit: cover;
+            aspect-ratio: 16 / 9;
+            background: linear-gradient(135deg, var(--bg-dark-elevated) 0%, var(--bg-dark-card) 100%);
+        }
+
+        .content h2 {
+            font-family: var(--font-display);
+            font-size: var(--text-2xl);
+            font-weight: 400;
+            color: var(--text-on-dark);
+            margin-top: var(--space-2xl);
+            margin-bottom: var(--space-lg);
+        }
+
+        .content p,
+        .content ul,
+        .content ol,
+        .content pre,
+        .content blockquote {
+            margin-bottom: calc(var(--space-lg) + .15rem);
+        }
+
+        .content ul,
+        .content ol {
+            padding-left: var(--space-xl);
+        }
+
+        .content li {
+            margin-bottom: var(--space-sm);
+        }
+
+        .content img {
+            width: 100%;
+            border-radius: 8px;
+            margin: var(--space-lg) 0;
+            display: block;
+            background: linear-gradient(135deg, var(--bg-dark-elevated) 0%, var(--bg-dark-card) 100%);
+        }
+
+        .article-figure {
+            width: min(calc(100% + 5rem), 52rem);
+            margin: var(--space-xl) auto var(--space-2xl);
+            margin-left: min(-2.5rem, calc((52rem - 100%) / -2));
+            padding: .9rem;
+            border: 1px solid var(--border-dark-subtle);
+            border-radius: 12px;
+            background: var(--bg-dark-card);
+        }
+
+        .article-figure img {
+            margin: 0;
+            border-radius: 6px;
+        }
+
+        .article-figure figcaption {
+            margin-top: .85rem;
+            color: var(--text-on-dark-subtle);
+            font-size: var(--text-sm);
+            line-height: 1.6;
+        }
+
+        .content code {
+            font-family: var(--font-mono);
+            font-size: .9em;
+            background: var(--bg-dark-card);
+            padding: .15em .4em;
+            border-radius: 4px;
+            border: 1px solid var(--border-dark-subtle);
+        }
+
+        .content pre,
+        .callout,
+        blockquote {
+            font-family: var(--font-mono);
+            font-size: var(--text-sm);
+            background: var(--bg-dark-card);
+            padding: var(--space-lg);
+            border-radius: 8px;
+            border: 1px solid var(--border-dark-subtle);
+            overflow-x: auto;
+        }
+
+        .content pre code {
+            background: none;
+            padding: 0;
+            border: none;
+        }
+
+        .content strong {
+            color: var(--text-on-dark);
+            font-weight: 500;
+        }
+
+        .meta-block {
+            margin-top: var(--space-3xl);
+            padding-top: var(--space-xl);
+            border-top: 1px solid var(--border-dark-subtle);
+            display: grid;
+            gap: var(--space-lg);
+        }
+
+        .meta-row p {
+            margin-top: var(--space-sm);
+            color: var(--text-on-dark-muted);
+            font-size: var(--text-sm);
+        }
+
+        .topics {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-sm);
+            margin-top: var(--space-sm);
+        }
+
+        .topic-chip {
+            color: var(--accent-teal);
+            border: 1px solid var(--border-dark-subtle);
+            padding: 2px 8px;
+        }
+
+        footer {
+            margin-top: var(--space-3xl);
+            padding-top: var(--space-xl);
+            border-top: 1px solid var(--border-dark-subtle);
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: var(--space-md);
+        }
+
+        footer a {
+            font-family: var(--font-mono);
+            font-size: var(--text-sm);
+            color: var(--text-on-dark-subtle);
+        }
+
+        footer a:hover {
+            color: var(--accent);
+        }
+
+        @media (max-width: 768px) {
+            .devlog-post {
+                padding: var(--space-2xl) var(--space-lg);
+            }
+            .devlog-post h1 {
+                font-size: clamp(1.75rem, 1.25rem + 2vw, 2.5rem);
+            }
+            .article-figure {
+                width: 100%;
+                margin-left: 0;
+                padding: .75rem;
+            }
+            .content pre,
+            .callout,
+            blockquote {
+                font-size: var(--text-xs);
+                padding: var(--space-md);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .devlog-post {
+                padding: var(--space-xl) var(--space-md);
+            }
+            .devlog-post h1 {
+                font-size: clamp(1.5rem, 1rem + 2vw, 2rem);
+            }
+            .content h2 {
+                font-size: var(--text-xl);
+            }
+            .hero-image {
+                margin: var(--space-lg) calc(-1 * var(--space-md));
+                width: calc(100% + var(--space-xl));
+                border-radius: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <article class="devlog-post">
+        <header>
+            <div class="eyebrow">FlowBoard Blog</div>
+            <h1>Cycle Node Build Notes</h1>
+            <p class="dek">Cheap before expensive as a design rule, a model API that changed under me mid-testing, green light that no tolerance slider could reach, and a GIF encoder that froze the UI. The parts of the Cycle node worth writing down.</p>
+            <time datetime="2026-09-12">September 12, 2026</time>
+        </header>
+
+        <img src="images/cycle-graph.png" alt="The complete Cycle node wiring graph: character sheet feeding the Cycle node, keyed frames into Comp nodes, sequences as animated layers" class="hero-image">
+
+        <section class="content">
+            <p>The Cycle node shipped this week, on the web app and the desktop app together (1.1.0), with a set of same-week follow-ups landing right behind it (1.2.0). The <a href="https://docs.flow.w33s3.com/guide/cycle/">manual chapter</a> is up and illustrated, and it carries an honest note that the feature is under active development. These are the parts of the build I think are worth writing down.</p>
+
+<h2>Cheap before expensive</h2>
+
+<p>The single rule that shaped the whole node is this: iterate on the cheap artifact before you commit to the expensive one. Everything else is downstream of that.</p>
+
+<p>I run FlowBoard on my own API keys, so I feel the cost of each generation directly. On my keys, a still image runs about two cents and a Veo clip runs about fifty cents. Those are rough BYOK numbers from my own usage, not FlowBoard's credit prices, but the ratio is the point: a video generation costs roughly twenty-five images. So the node is built to never let you spend the video price on a mistake you could have caught at the image price.</p>
+
+<p>The whole cycle hangs on the start pose. If the pose is wrong, the clip is wrong, and you paid the clip price to find out. So the start pose gets its own generate, inspect, regenerate loop, with a full-screen inspector, entirely at image prices. Only an approved pose is allowed to ride into the video request.</p>
+
+<p>Here is the anecdote that made me sure this was right. An early pose generation gave the character three arms. If that had gone straight into a Veo request, I would have paid fifty cents to animate a three-armed man, then paid again to try to fix him. Instead I saw it in the pose inspector, regenerated, and moved on for a couple of cents. The workflow exists so that the expensive step only ever sees material you have already approved.</p>
+
+<h2>The API moved while I was testing</h2>
+
+<p>Building against a hosted model means building against a moving target. Partway through testing, Veo 3.1 Fast started rejecting first-plus-last-frame interpolation server-side. The exact response was "your use case is currently not supported." This was a capability that had tested fine months earlier. Nothing in my code changed; the model's contract did.</p>
+
+<p>So the node now detects that rejection and falls back automatically to first-frame-only pinning. You still get a clip driven by your approved start pose; you just lose the ability to also pin the end frame when the backend has decided not to offer it. The lesson I took from this is not a clever one, but it is a real one: when you build on someone else's model, treat every capability as revocable and give yourself a fallback before you need it.</p>
+
+<h2>Short prompts beat choreography</h2>
+
+<p>My first instinct with motion was to over-specify it. I wrote prompts like a shot list: chamber the leg, extend, hold, retract, recover. A video model does not read that as a description of a motion. It reads it as a schedule, and it tries to execute every beat literally, and it runs out of clip before it finishes the list. You get a rushed, clipped performance that never returns to the start.</p>
+
+<p>Short structural phrasing wins. The prompt that actually works looks like this:</p>
+
+<pre><code>single high side-kick and back to original pose then hold</code></pre>
+
+<p>That gives the model a shape with a beginning, a peak, and a return, and it lets the model fill in the frames. It also composes better as a loop, because "back to original pose then hold" is telling the model to end where it started. The templates in the node stay universal; the specificity lives in the text you edit.</p>
+
+<figure class="article-figure"><a href="images/cycle-graph.png"><img src="images/cycle-graph.png" alt="The complete Cycle node wiring graph: character sheet feeding the Cycle node, keyed frames feeding Comp nodes, sequences feeding animated layers"></a><figcaption>The full graph. Sheet into Cycle, keyed frames into Comp, sequences as animated layers.</figcaption></figure>
+
+<h2>Chroma key alone is not enough</h2>
+
+<p>Keying the character off the green background is the obvious step, and it is not the hard part. The hard part is the green that is not the background at all: the green bounce light that the green screen throws onto the character, baked into the silhouette as opaque pixels that are genuinely part of the figure. No tolerance slider reaches that, because widening the tolerance to catch the rim starts eating the character.</p>
+
+<p>The fix is a matte-edge despill pass that only touches the edge. First erode the soft halo. Then clamp green on an edge band only a couple of pixels deep, right where the bounce light lives. Interiors are left alone, which matters, because the character wears a green jacket in some frames and I very much did not want the despill to eat it. Green on the edge is spill; green in the middle is wardrobe. The pass is built to tell them apart. There is also a noise-tolerant auto-crop on top of it, so a stray keyed pixel does not blow the crop out to the full canvas.</p>
+
+<figure class="article-figure"><a href="images/cycle-curated.png"><img src="images/cycle-curated.png" alt="Twelve curated frames loaded into a Sequence-On Reference, composited over a background"></a><figcaption>Twelve curated frames in a Sequence-On Reference, keyed clean, composited over a background.</figcaption></figure>
+
+<h2>The GIF export froze the UI, and why</h2>
+
+<p>This is the bug I am least proud of and most glad I caught. The GIF exporter initially encoded on the main thread. The reason was not laziness; it was that wiring gif.js's worker properly ran into a bundler issue, and encoding on the main thread was the path that compiled. It worked fine on a two-frame test.</p>
+
+<p>At composition scale it froze the browser solid. Encoding dozens of high-resolution frames on the main thread blocks the very thread that draws the UI, so the whole app locks up for the length of the encode. The fix was to bundle gif.js's worker through Vite's <code>?url</code> imports, which sidesteps the original bundler problem and gets the encode back onto a worker where it belongs. I verified it against production at forty frames of 1080p, which is well past the scale that used to lock everything up.</p>
+
+<p>One more bug the review process caught before merge: an export canvas-aliasing bug that would have made every exported GIF a stack of identical final frames. A per-task code review flagged it. That is the kind of bug that ships silently, and then every animation you export is secretly a still.</p>
+
+<h2>What it is now</h2>
+
+<p>The node exists, it is in the web app and the desktop app, and the manual documents it. It is also, by the manual's own note, under active development, and I would rather say that than pretend otherwise. What is solid is the shape: cheap iteration on the pose, a fallback when the model API changes underneath me, prompts that describe a shape instead of a schedule, an edge-only despill that respects green jackets, and an encoder that no longer holds the UI hostage. The rest is the ordinary work of a young feature getting older.</p>
+        </section>
+
+        <section class="meta-block">
+            <div class="meta-row">
+                <div class="meta-heading">Covered topics</div>
+                <div class="topics">
+                    <span class="topic-chip">cycle node</span><span class="topic-chip">chroma key</span><span class="topic-chip">veo</span><span class="topic-chip">manual</span>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <a href="./index.html">← Back to FlowBoard Blog</a>
+            <a href="https://flow.w33s3.com">FlowBoard, the app →</a>
+        </footer>
+    </article>
+</body>
+</html>
