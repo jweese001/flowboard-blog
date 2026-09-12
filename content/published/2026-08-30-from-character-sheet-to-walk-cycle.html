@@ -180,6 +180,19 @@
             border-radius: 6px;
         }
 
+        .article-figure--compact {
+            width: 100%;
+            margin-left: 0;
+            margin-right: 0;
+        }
+
+        .article-figure--compact img {
+            width: auto;
+            max-width: 100%;
+            margin: 0 auto;
+            display: block;
+        }
+
         .article-figure figcaption {
             margin-top: .85rem;
             color: var(--text-on-dark-subtle);
@@ -334,7 +347,7 @@
 
 <p>Video mode takes the pinned start pose and drives Veo from it, asking for a described motion and getting back a short clip that the node breaks into frames. Sheet mode does something more old-fashioned: it generates one sprite sheet, a grid of poses laid out with green gutters between them, and slices along those gutters into individual frames. One mode is a generated performance, the other is a generated contact sheet. Either way you come out the far side with a stack of frames instead of a stack of pixels.</p>
 
-<figure class="article-figure"><a href="images/cycle-node.png"><img src="images/cycle-node.png" alt="The Cycle node in the FlowBoard graph, a tall node showing pose controls, mode selection, and the keyed frame output"></a><figcaption>The Cycle node. Pose at the top, mode in the middle, keyed frames out the bottom.</figcaption></figure>
+<figure class="article-figure article-figure--compact"><a href="images/cycle-node.png"><img src="images/cycle-node.png" alt="The Cycle node in the FlowBoard graph, a tall node showing pose controls, mode selection, and the keyed frame output"></a><figcaption>The Cycle node. Pose at the top, mode in the middle, keyed frames out the bottom.</figcaption></figure>
 
 <h2>Frames come back ready to use</h2>
 
@@ -358,7 +371,7 @@
 
 <p>Those frames go into a Sequence-On Reference. And now it loops forever, not because a model was asked to make a loop, but because I picked the first frame and the last frame and they are the same footfall. The loop is true by construction. A person decided where it begins and ends.</p>
 
-<figure class="article-figure"><img src="images/cycle-walk-loop.gif" alt="The finished walk cycle looping seamlessly, the character stepping in place"><figcaption>The finished cycle. Twelve frames, chosen on purpose.</figcaption></figure>
+<figure class="article-figure article-figure--compact"><img src="images/cycle-walk-loop.gif" alt="The finished walk cycle looping seamlessly, the character stepping in place"><figcaption>The finished cycle. Twelve frames, chosen on purpose.</figcaption></figure>
 
 <p>That is the part I keep coming back to. The node generates a lot, but the animation is the twelve frames a person kept. The generation gets you material fast. The judgment about which material to keep stays with you, frame by frame, and that is where the thing actually becomes yours.</p>
         </section>
