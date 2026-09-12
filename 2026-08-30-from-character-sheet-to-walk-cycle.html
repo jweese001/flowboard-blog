@@ -11,9 +11,9 @@
     <meta property="og:description" content="How the Cycle node turns a static character sheet into a loopable, keyed walk cycle inside the same FlowBoard graph you use for stills.">
     <meta property="og:url" content="https://jweese001.github.io/flowboard-blog/2026-08-30-from-character-sheet-to-walk-cycle.html">
     <link rel="canonical" href="https://jweese001.github.io/flowboard-blog/2026-08-30-from-character-sheet-to-walk-cycle.html">
-    <meta property="og:image" content="https://jweese001.github.io/flowboard-blog/images/cycle-pose-modal.png">
+    <meta property="og:image" content="https://jweese001.github.io/flowboard-blog/images/mason-sheet.jpg">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content="https://jweese001.github.io/flowboard-blog/images/cycle-pose-modal.png">
+    <meta name="twitter:image" content="https://jweese001.github.io/flowboard-blog/images/mason-sheet.jpg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500;600&family=Sora:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -313,7 +313,7 @@
             <time datetime="2026-08-30">August 30, 2026</time>
         </header>
 
-        <img src="images/cycle-pose-modal.png" alt="Full-screen pose inspector showing the character on a green background with the pose description visible" class="hero-image">
+        <img src="images/mason-sheet.jpg" alt="Character sheet for Mason from the Black Cat series, showing front, side, and three-quarter views with expression studies" class="hero-image">
 
         <section class="content">
             <p>A character sheet is a promise of motion. You draw the front, the side, the three-quarter, the expressions, and every angle says the same thing: this person could walk out of the page. But a sheet does not walk. It sits there, fully specified and completely still, waiting for someone to do the part it cannot do itself.</p>
@@ -326,7 +326,7 @@
 
 <p>The Cycle node gives the start pose its own loop. You describe the pose, generate it, and open it full-screen in an inspector to actually look at it, not squint at a thumbnail on the canvas. If it is wrong, regenerate it in place. You stay in that loop, at image prices, until the pose is one you would be happy to build forty frames on top of. Only an approved pose rides forward. Nothing expensive happens until you have decided the cheap thing is good.</p>
 
-<figure class="article-figure"><a href="images/mason-sheet.jpg"><img src="images/mason-sheet.jpg" alt="Character sheet for Mason from the Black Cat series, showing front, side, and three-quarter views with expression studies"></a><figcaption>The sheet that starts everything. It specifies the character completely and moves not at all.</figcaption></figure>
+<figure class="article-figure"><a href="images/cycle-pose-modal.png"><img src="images/cycle-pose-modal.png" alt="Full-screen pose inspector showing the character on a green background with the pose description visible, ready for in-place regeneration"></a><figcaption>The pose inspector. Full-screen, so you can judge the frame before it costs anything to move on.</figcaption></figure>
 
 <h2>Two ways to get frames</h2>
 
@@ -341,8 +341,6 @@
 <p>Raw generated frames are not usable on their own. A walk against a green field is a walk trapped in a green field. So the node does the cleanup before it hands anything back: the frames come keyed, despilled, and cropped. The green is gone, the green light that bounces onto the character is gone with it, and each frame is trimmed to the character instead of the canvas.</p>
 
 <p>What lands downstream is a sequence of frames with real transparency, which is exactly what you need for the next part.</p>
-
-<figure class="article-figure"><a href="images/cycle-pose-modal.png"><img src="images/cycle-pose-modal.png" alt="Full-screen pose inspector showing the character on a green background with the pose description visible, ready for in-place regeneration"></a><figcaption>The pose inspector. Full-screen, so you can judge the frame before it costs anything to move on.</figcaption></figure>
 
 <h2>Comp puts the walk somewhere</h2>
 
